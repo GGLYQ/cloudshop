@@ -4,7 +4,7 @@
       <div class="cross">
         <van-icon name="cross" color="#fff" size="18px" />
       </div>
-      <div class="register">
+      <div class="link-register" @click="goRegister">
         注册
       </div>
     </div>
@@ -19,13 +19,13 @@
 
     <van-form @submit="onSubmit">
       <van-cell-group inset>
-        <van-field v-model="username" name="用户名" label="用户名" placeholder="用户名"
+        <van-field v-model="state.username" name="用户名" label="用户名" placeholder="用户名"
           :rules="[{ required: true, message: '请填写用户名' }]" />
-        <van-field v-model="password" type="password" name="密码" label="密码" placeholder="密码"
+        <van-field v-model="state.password" type="password" name="密码" label="密码" placeholder="密码"
           :rules="[{ required: true, message: '请填写密码' }]" />
       </van-cell-group>
       <div style="margin: 16px;">
-        <van-button round block color="#f86c35" native-type="submit">
+        <van-button round block type="primary" native-type="submit">
           登录
         </van-button>
       </div>
@@ -34,12 +34,40 @@
   </div>
 
   <div class="footer">
-    <i class="iconfont icon-weixin"></i>icon-weixin
+    <div class="wx">
+      <i class="iconfont icon-weixin" style="color:rgb(67, 165, 68)"></i>
+      <span>微信登录</span>
+    </div>
+    <div class="sj">
+      <i class="iconfont icon-shouji1" style="color:rgb(85, 151, 226)"></i>
+      <span>本机号码一键登录</span>
+    </div>
+    <div class="pg">
+      <i class="iconfont icon-pingguo" style="color:rgb(60, 67, 75)"></i>
+      <span>苹果登录</span>
+
+    </div>
   </div>
 </template>
 
 <script setup>
+import { reactive } from 'vue';
+import { useRouter } from 'vue-router';
 
+const router=useRouter()
+
+const state=reactive({
+  username:'',
+  password:''
+})
+
+const onSubmit=()=>{
+  console.log('dd');
+}
+
+const goRegister=()=>{
+  router.push('/register')
+}
 </script>
 
 <style lang="less" scoped>
@@ -56,7 +84,7 @@ Header {
     justify-content: space-between;
     align-items: center;
 
-    .register {
+    .link-register {
       color: #efefef;
       font-size: 17px;
     }
@@ -73,20 +101,38 @@ Header {
 
 .login-wrap {
   width: 90%;
-  height: 230px;
+  height: 300px;
   background: #fff;
   border-radius: 3%;
   box-shadow: 0 0 0 3px #efefef;
   margin: 0 auto;
   margin-top: -90px;
-  .title{
-    color:#373737;
+
+  .title {
+    color: #373737;
     text-align: center;
     font-size: 16px;
     line-height: 16px;
-    padding-bottom: 30px;
-    padding-top: 20px;
+    padding-bottom: 40px;
+    padding-top: 40px;
   }
- 
+
+}
+
+.footer {
+  width: 100%;
+  padding: 140px 40px;
+  display: flex;
+  justify-content: space-between;
+
+  div {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    i {
+      font-size: 40px;
+    }
+  }
+
 }
 </style>
