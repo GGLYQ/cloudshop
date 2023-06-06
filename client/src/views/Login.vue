@@ -61,10 +61,12 @@ const state=reactive({
   password:''
 })
 
+//登录
 const onSubmit=()=>{
   console.log('dd');
 }
 
+//去注册
 const goRegister=()=>{
   router.push('/register')
 }
