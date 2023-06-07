@@ -53,21 +53,35 @@
 <script setup>
 import { reactive } from 'vue';
 import { useRouter } from 'vue-router';
+import axios from '@/api/axios.js';
+import { showToast } from 'vant';
 
-const router=useRouter()
+const router = useRouter()
 
-const state=reactive({
-  username:'',
-  password:''
+const state = reactive({
+  username: '',
+  password: ''
 })
 
 //登录
-const onSubmit=()=>{
-  console.log('dd');
+const onSubmit = async () => {
+  //发接口请求，把用户输入的账号和密码传给后端
+  const res = await axios.post('/users/login', {
+    username: state.username,
+    password: state.password
+  })
+  // console.log(result);
+  sessionStorage.setItem('userInfo',JSON.stringify(res.data))
+  if (res.code === '80000') {
+    showToast(`你好，${state.username}`);
+    setTimeout(() => {
+      router.push({ path: '/home' })
+    }, 1000)
+  }
 }
 
 //去注册
-const goRegister=()=>{
+const goRegister = () => {
   router.push('/register')
 }
 </script>
@@ -131,6 +145,7 @@ Header {
     display: flex;
     flex-direction: column;
     align-items: center;
+
     i {
       font-size: 40px;
     }
