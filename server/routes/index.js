@@ -1,18 +1,11 @@
 const router = require('koa-router')()
+const goods=require('../data/goods.js')
 
-router.get('/', async (ctx, next) => {
-  await ctx.render('index', {
-    title: 'Hello Koa 2!'
-  })
-})
-
-router.get('/string', async (ctx, next) => {
-  ctx.body = 'koa2 string'
-})
-
-router.get('/json', async (ctx, next) => {
-  ctx.body = {
-    title: 'koa2 json'
+router.post('/goodsList', async (ctx, next) => {
+  ctx.body={
+    code:'80000',
+    message:'获取商品数据成功',
+    data:goods
   }
 })
 

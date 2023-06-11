@@ -15,7 +15,6 @@
         {{ item.content }}
          <div class="sjx" :class="{ 'current': currentId === item.id }"></div>
       </li>
-     
     </ul>
   </div>
 </template>
@@ -163,6 +162,7 @@ const selectMenu = (id) => {
         border-right: 9px solid transparent;
         border-bottom: 8px solid rgb(255, 255, 255);
         margin: 0 auto;
+        transition: all .5s;
       }
     }
   }

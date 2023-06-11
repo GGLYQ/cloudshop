@@ -20,6 +20,21 @@ const routes=[
     path:'/register',
     name: 'register',
     component:()=>import('@/views/Register.vue')
+  },
+  {
+    path:'/category',
+    name: 'category',
+    component:()=>import('@/views/Category.vue')
+  },
+  {
+    path:'/cart',
+    name: 'cart',
+    component:()=>import('@/views/Cart.vue')
+  },
+  {
+    path:'/user',
+    name: 'user',
+    component:()=>import('@/views/User.vue')
   }
 ]
 
