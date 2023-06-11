@@ -13,7 +13,7 @@
     <ul class="nav-content">
       <li class="nav-item" v-for="item in navList" :key="item.id" @click="selectMenu(item.id)">
         {{ item.content }}
-         <div class="sjx" :class="{ 'current': currentId === item.id }"></div>
+        <div class="sjx" :class="{ 'current': currentId === item.id }"></div>
       </li>
     </ul>
   </div>
@@ -21,6 +21,7 @@
 
 <script setup>
 import BetterScroll from 'better-scroll'
+import { reactive } from 'vue';
 import { nextTick } from 'vue';
 import { ref } from 'vue';
 
@@ -64,10 +65,14 @@ const navList =
     }
   ]
 
+
 //BScroll
 const navWrap = ref(null) //ref获取dom结构
+let scroll = reactive({
+  navScroll: {}
+})
 const _initScroll = () => {
-  new BetterScroll(navWrap.value, {
+  scroll.navScroll=new BetterScroll(navWrap.value, {
     click: true,
     scrollX: true,
     probeType: 3
@@ -76,6 +81,10 @@ const _initScroll = () => {
 nextTick(() => {
   _initScroll()
 })
+
+setTimeout(()=>{
+  scroll.navScroll.refresh()
+},500)
 
 
 //点菜单的某一项
@@ -155,6 +164,7 @@ const selectMenu = (id) => {
       font-size: 13px;
       color: #ffffff;
       padding: 8px 15px;
+
       .current {
         width: 0;
         height: 0;
