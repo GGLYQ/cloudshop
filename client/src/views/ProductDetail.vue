@@ -57,7 +57,7 @@ import GoodsList from '@/components/GoodsList.vue'
 
 const state = reactive({
   allImgUrl: [],
-  productDetail: []
+  productDetail: [],
 })
 
 const route = useRoute()
@@ -66,6 +66,7 @@ onMounted(async () => {
   const { data } = await axios.post(`/productDetail/${id}`)
   state.allImgUrl = data.allImgUrl
   state.productDetail = data
+  
 })
 
 const router = useRouter()
@@ -79,9 +80,15 @@ const gotoCart = () => {
   router.push('/cart')
 }
 
-const addCart = () => {
+const addCart = async() => {
   //往购物车数据中植入一条数据
+  // const {res}=await axios.post('/cartAdd',{
+  //   productId:state.productDetail.id
+  // })
+  // console.log(res);
 }
+
+
 const goToAddCart = () => {
   //先往购物车数据中植入一条数据
   //再跳转到购物车页面

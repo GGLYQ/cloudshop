@@ -52,8 +52,32 @@ const userRegister = (values) => {
   let _sql=`insert into users set username=?,password=?;`
   return allService.query(_sql,values)
 }
+
+//根据用户名查找用户 根据用户名查找此用户购物车的数据 
+const cartList=(username)=>{
+  let _sql=`select * from cart where username="${username}";`
+  return allService.query(_sql)
+}
+
+//在cart中添加一条数据
+const cartAdd=(values) => {
+  let _sql=`insert into cart set id=?,username=?,name=?,price=?,max=?,min=?,shop=?,address=?,guarantee=?,imgUrl=?,num=?;`
+  return allService.query(_sql,values)
+}
+
+//在cart中查找商品id为多少的那一项以便添加数据
+const cartFind=(id)=>{
+  let _sql = `select * from cart where id="${id}";`
+  return allService.query(_sql)
+}
+
 module.exports = {
   userLogin,
+
   userfind,
-  userRegister
+  userRegister,
+
+  cartList,
+  cartAdd,
+  cartFind
 }
