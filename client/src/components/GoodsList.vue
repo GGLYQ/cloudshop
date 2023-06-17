@@ -75,7 +75,9 @@ const gotoDetail=(item)=>{
       background: #ffffff;
       margin-bottom: 5px;
       border-radius: 5%;
-
+      &:nth-last-child(1){
+        margin-bottom: 105px;
+      }
       img {
         width: 100%;
         height: 100%;

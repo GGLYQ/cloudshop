@@ -21,7 +21,7 @@
 
           <van-card price="2.00" desc="描述信息" :title="item.name" :thumb="item.imgUrl">
             <template #footer>
-              <van-stepper v-model="item.num" :min="item.min" max="200" />
+              <van-stepper v-model="item.num" :min="item.min" :max="item.max" @change="onChange" :name="item.id" />
             </template>
           </van-card>
 
@@ -34,17 +34,21 @@
 
   </div>
 
-
   <van-submit-bar class="sub-all" :price="3050" button-text="提交订单" @submit="onSubmit">
     <van-checkbox v-model="checked">全选</van-checkbox>
   </van-submit-bar>
 
+  <van-divider class="like" :style="{ color: '#f86c35', borderColor: '#f86c35', padding: '0 16px' }">
+    猜你喜欢
+  </van-divider>
 
-  <Footer />
+  <GoodsList />
+  <Footer :dot="state.cartData.length" />
 </template>
 
 <script setup>
 import Footer from '@/components/Footer.vue'
+import GoodsList from '@/components/GoodsList.vue'
 import { reactive } from 'vue';
 import axios from '@/api/axios.js'
 import { onMounted } from 'vue';
@@ -52,8 +56,7 @@ import { nextTick } from 'vue';
 
 const state = reactive({
   userData: {},
-  cartData: {},
-  shopData: {}
+  cartData: {}
 })
 
 
@@ -65,11 +68,18 @@ nextTick(async () => {
     username: state.userData.username
   })
   // console.log(res.data);
-  state.cartData=res.data;
+  state.cartData = res.data;
 
 })
 
-//在所有购物车商品数据中找出相同店铺的商品放在
+
+const onChange = async(value, detail) => {
+  // console.log(value, detail);
+  await axios.post('/cartModify',{
+    id:detail.name,
+    num:value
+  })
+}
 </script>
 
 <style lang="less" scoped>
@@ -97,7 +107,6 @@ nextTick(async () => {
 
   .cart-content {
     width: 100%;
-
     background: #f8f8f8;
     border-radius: 10px;
     margin-bottom: 5px;
@@ -152,5 +161,14 @@ nextTick(async () => {
 
 .van-checkbox {
   width: 60px;
+}
+
+.van-divider {
+  font-weight: 600;
+}
+
+.van-divider:before,
+.van-divider:after {
+  border-width: 1px;
 }
 </style>

@@ -59,17 +59,30 @@ const cartList=(username)=>{
   return allService.query(_sql)
 }
 
+//在cart中查找商品id为多少的那一项以便添加数据
+const cartFind=(id)=>{
+  let _sql = `select * from cart where id="${id}";`
+  return allService.query(_sql)
+}
+
+//添加前如存在此商品则让num加一并存入数据库
+const numAdd=(id)=>{
+  let _sql = `update cart set num=num+1 where id="${id}";`
+  return allService.query(_sql)
+}
+
 //在cart中添加一条数据
 const cartAdd=(values) => {
   let _sql=`insert into cart set id=?,username=?,name=?,price=?,max=?,min=?,shop=?,address=?,guarantee=?,imgUrl=?,num=?;`
   return allService.query(_sql,values)
 }
 
-//在cart中查找商品id为多少的那一项以便添加数据
-const cartFind=(id)=>{
-  let _sql = `select * from cart where id="${id}";`
+//在购物车页面增加或减少商品数量数据库中的cart表的num字段也需修改
+const cartModify=(num,id)=>{
+  let _sql = `update cart set num="${num}" where id="${id}";`
   return allService.query(_sql)
 }
+
 
 module.exports = {
   userLogin,
@@ -78,6 +91,9 @@ module.exports = {
   userRegister,
 
   cartList,
+  cartFind,
+  numAdd,
   cartAdd,
-  cartFind
+ 
+  cartModify
 }

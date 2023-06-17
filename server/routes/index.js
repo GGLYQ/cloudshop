@@ -51,21 +51,32 @@ router.post('/cartList', async (ctx, next) => {
 })
 
 router.post('/cartAdd', async (ctx, next) => {
-  const { id, username, name, price, max, min, shop, address, guarantee, imgUrl, num } = ctx.request.body
+  let { id, username, name, price, max, min, shop, address, guarantee, imgUrl, num } = ctx.request.body
   //判断该商品是否在cart数据库中存在
+
   try {
     let findres = await userService.cartFind(id)
     if (findres.length) {  //如找到数据则向前端报错
-      ctx.body = {
-        code: '80003',
-        data: 'error',
-        msg: '该商品已在购物车！'
-      }
-      num++;
+      await userService.numAdd(id).then(res => {
+        // console.log(res);
+        if (res.affectedRows !== 0) {
+          ctx.body = {
+            code: '80000',
+            data: 'success',
+            msg: '商品已在购物车！'
+          }
+        } else {
+          ctx.body = {
+            code: '80004',
+            data: 'error',
+            msg: '添加失败！'
+          }
+        }
+      })
     } else {  //如没找到则添加成功，往数据库添加这条数据
-      await userService.cartAdd([id, username, name, price, max, min, shop, address, guarantee, imgUrl, num])
+      await userService.cartAdd([id, username, name, price, max, min, shop, address, guarantee, imgUrl, num=min])
         .then(res => {
-          console.log(res);
+          // console.log(res);
           if (res.affectedRows !== 0) {
             ctx.body = {
               code: '80000',
@@ -81,6 +92,7 @@ router.post('/cartAdd', async (ctx, next) => {
           }
         })
     }
+
   } catch (error) {
     ctx.body = {
       code: '80002',
@@ -88,5 +100,25 @@ router.post('/cartAdd', async (ctx, next) => {
       msg: '服务器异常'
     }
   }
+})
+
+router.post('/cartModify', async (ctx, next) => {
+  const {num,id}=ctx.request.body
+  await userService.cartModify(num,id).then(res => {
+    // console.log(res);
+    if (res.affectedRows !== 0) {
+      ctx.body = {
+        code: '80000',
+        data: 'success',
+        msg: '修改成功！'
+      }
+    } else {
+      ctx.body = {
+        code: '80004',
+        data: 'error',
+        msg: '修改失败！'
+      }
+    }
+  })
 })
 module.exports = router

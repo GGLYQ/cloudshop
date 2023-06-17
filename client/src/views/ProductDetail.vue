@@ -39,7 +39,7 @@
   <div class="footer">
     <van-action-bar>
       <van-action-bar-icon icon="chat-o" text="客服" color="#ee0a24" />
-      <van-action-bar-icon @click="gotoCart" icon="cart-o" :badge="5" text="购物车" />
+      <van-action-bar-icon @click="gotoCart" icon="cart-o" :badge="cart.badge ? cart.badge : ''" text="购物车" />
       <van-action-bar-icon icon="star" text="收藏" />
       <van-action-bar-button @click="addCart" type="warning" text="加入购物车" />
       <van-action-bar-button @click="goToAddCart" type="danger" text="立即购买" />
@@ -54,19 +54,27 @@ import { reactive } from 'vue';
 import { useRoute, useRouter } from 'vue-router'
 import Header from '@/components/Header.vue'
 import GoodsList from '@/components/GoodsList.vue'
+import { showToast } from 'vant';
+import useCartStore from '@/store/cart.js'
+
+const cart = useCartStore()
 
 const state = reactive({
   allImgUrl: [],
   productDetail: [],
+  userData: {}
 })
 
 const route = useRoute()
 onMounted(async () => {
+  cart.changeBadge()  //购物车角标更新
+
   const { id } = route.params
   const { data } = await axios.post(`/productDetail/${id}`)
   state.allImgUrl = data.allImgUrl
   state.productDetail = data
-  
+
+  state.userData = JSON.parse(sessionStorage.getItem('userInfo')) //拿到登录者的用户名以便查询他的购物车数据
 })
 
 const router = useRouter()
@@ -80,26 +88,64 @@ const gotoCart = () => {
   router.push('/cart')
 }
 
-const addCart = async() => {
+const addCart = async () => {
   //往购物车数据中植入一条数据
-  // const {res}=await axios.post('/cartAdd',{
-  //   productId:state.productDetail.id
-  // })
-  // console.log(res);
+  const res = await axios.post('/cartAdd', {  //拿到该商品的所有数据
+    id: state.productDetail.id,
+    username: state.userData.username,
+    name: state.productDetail.name,
+    price: state.productDetail.price,
+    max: state.productDetail.max,
+    min: state.productDetail.min,
+    shop: state.productDetail.shop,
+    address: state.productDetail.address,
+    guarantee: state.productDetail.guarantee,
+    imgUrl: state.productDetail.imgUrl,
+    num: state.productDetail.num
+  })
+  if (res.code === '80000') {
+    //更新购物车角标
+    cart.changeBadge()  //购物车角标更新
+    showToast(res.msg);
+  }
+
+
 }
 
 
-const goToAddCart = () => {
+const goToAddCart = async () => {
   //先往购物车数据中植入一条数据
   //再跳转到购物车页面
+  const res = await axios.post('/cartAdd', {  //拿到该商品的所有数据
+    id: state.productDetail.id,
+    username: state.userData.username,
+    name: state.productDetail.name,
+    price: state.productDetail.price,
+    max: state.productDetail.max,
+    min: state.productDetail.min,
+    shop: state.productDetail.shop,
+    address: state.productDetail.address,
+    guarantee: state.productDetail.guarantee,
+    imgUrl: state.productDetail.imgUrl,
+    num: state.productDetail.num
+  })
+  if (res.code === '80000') {
+    //更新购物车角标
+    cart.changeBadge()  //购物车角标更新
+    showToast(res.msg);
+    setTimeout(() => {
+      router.push({ path: '/cart' })
+    }, 1000)
+  }
 }
 
 </script>
 
 <style lang="less" scoped>
-.van-nav-bar{
+.van-nav-bar {
   background: #f86c35;
 }
+
 .detail-header {
   width: 100%;
   position: fixed;
