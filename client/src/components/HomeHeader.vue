@@ -65,14 +65,13 @@ const navList =
     }
   ]
 
-
 //BScroll
 const navWrap = ref(null) //ref获取dom结构
 let scroll = reactive({
   navScroll: {}
 })
 const _initScroll = () => {
-  scroll.navScroll=new BetterScroll(navWrap.value, {
+  scroll.navScroll = new BetterScroll(navWrap.value, {
     click: true,
     scrollX: true,
     probeType: 3
@@ -82,10 +81,9 @@ nextTick(() => {
   _initScroll()
 })
 
-setTimeout(()=>{
+setTimeout(() => {
   scroll.navScroll.refresh()
-},500)
-
+}, 500)
 
 //点菜单的某一项
 let currentId = ref(0)
@@ -93,6 +91,7 @@ const selectMenu = (id) => {
   console.log(id);
   currentId.value = id
 }
+
 </script>
 
 <style lang="less" scoped>

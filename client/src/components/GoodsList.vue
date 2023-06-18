@@ -36,6 +36,7 @@
 import axios from '@/api/axios.js';
 import { reactive } from 'vue';
 import {useRouter} from 'vue-router';
+import { showLoadingToast,closeToast } from 'vant';
 
 const state = reactive({
   goodsList: [],
@@ -43,9 +44,11 @@ const state = reactive({
 })
 
 const getgoods = async () => {
+  showLoadingToast({ message: '加载中', forbidClick: true, duration: 0 })
   const res = await axios.get('/goodsList')
   state.goodsList = res.data.goodsList
   state.goodsList1 = res.data.goodsList1
+  closeToast()
 }
 getgoods()
 

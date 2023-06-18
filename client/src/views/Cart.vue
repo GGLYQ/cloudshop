@@ -2,13 +2,13 @@
   <div class="header">
     <div class="title">
       购物车
-      <div class="sum">共2件商品</div>
+      <div class="sum">共{{ state.cartData.length }}件商品</div>
     </div>
 
     <div class="handle">管理</div>
   </div>
 
-  <div class="cart-wrap">
+  <div class="cart-wrap" v-if="state.cartData.length">
     <div class="cart-content" v-for="item in state.cartData" :key="item.id">
       <div class="seller">
         <i class="iconfont icon-shangpu"></i>
@@ -19,7 +19,7 @@
         <van-swipe-cell>
           <van-checkbox :name="item.id" />
 
-          <van-card price="2.00" desc="描述信息" :title="item.name" :thumb="item.imgUrl">
+          <van-card :price="`${item.price}.00`" desc="描述信息" :title="item.name" :thumb="item.imgUrl">
             <template #footer>
               <van-stepper v-model="item.num" :min="item.min" :max="item.max" @change="onChange" :name="item.id" />
             </template>
@@ -34,8 +34,10 @@
 
   </div>
 
-  <van-submit-bar class="sub-all" :price="3050" button-text="提交订单" @submit="onSubmit">
-    <van-checkbox v-model="checked">全选</van-checkbox>
+  <div class="no-cart" v-else>购物车是空的，去逛逛吧</div>
+
+  <van-submit-bar class="sub-all" :price="totalPrice * 100" button-text="提交订单" @submit="onSubmit">
+    <van-checkbox v-model="state.checkedAll" @click="allCheck">全选</van-checkbox>
   </van-submit-bar>
 
   <van-divider class="like" :style="{ color: '#f86c35', borderColor: '#f86c35', padding: '0 16px' }">
@@ -53,33 +55,75 @@ import { reactive } from 'vue';
 import axios from '@/api/axios.js'
 import { onMounted } from 'vue';
 import { nextTick } from 'vue';
+import { showLoadingToast, closeToast } from 'vant';
+import { computed } from 'vue';
+import { watch } from 'vue';
 
 const state = reactive({
   userData: {},
-  cartData: {}
+  cartData: [],
+  result: [],
+  checkedAll: false
 })
 
-
-
+//购物车列表
 nextTick(async () => {
+  showLoadingToast({ message: '加载中', forbidClick: true, duration: 0 })
   state.userData = JSON.parse(sessionStorage.getItem('userInfo')) //拿到登录者的用户名以便查询他的购物车数据
-  // console.log(state.cartData.username);  //zt
   const res = await axios.post('/cartList', {
     username: state.userData.username
   })
   // console.log(res.data);
   state.cartData = res.data;
-
+  closeToast()
 })
 
-
-const onChange = async(value, detail) => {
+//修改商品数量
+const onChange = async (value, detail) => {
   // console.log(value, detail);
-  await axios.post('/cartModify',{
-    id:detail.name,
-    num:value
+  showLoadingToast({ message: '加载中', forbidClick: true, duration: 0 })
+  await axios.post('/cartModify', {
+    id: detail.name,
+    num: value
   })
+  closeToast()
 }
+
+//计算总额
+const totalPrice = computed(() => {
+  let sum = 0
+  let _list = state.cartData.filter(item => state.result.includes(item.id))
+  _list.forEach(item => {
+    sum += item.price * item.num
+  });
+  return sum
+})
+
+//点击全选全部选中
+// watch(
+//   () => state.checkedAll,
+//   (newVal) => {
+//     if (!newVal) {
+//       state.result = []
+//     } else {
+//       state.result = state.cartData.map(item => item.id)
+//     }
+//   })
+  const allCheck=()=>{  //checked为true或false
+    if (!state.checkedAll) {
+      state.result = []
+    } else {
+      state.result = state.cartData.map(item => item.id)
+    }
+  }
+
+//全部勾选时全选按钮也要勾选
+watch(
+  () => state.result,
+  (newVal) => {
+    state.checkedAll = state.cartData.length === newVal.length ? true : false
+  }
+)
 </script>
 
 <style lang="less" scoped>
@@ -128,6 +172,17 @@ const onChange = async(value, detail) => {
   }
 }
 
+.no-cart {
+  width: 95%;
+  height: 35%;
+  background-color: #f8f8f8;
+  margin: -100px 9px 0 9px;
+  font-size: 16px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
 .sub-all {
   position: fixed;
   bottom: 50px;
@@ -170,5 +225,9 @@ const onChange = async(value, detail) => {
 .van-divider:before,
 .van-divider:after {
   border-width: 1px;
+}
+
+body {
+  background-color: #f8f8f8;
 }
 </style>

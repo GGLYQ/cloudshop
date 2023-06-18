@@ -1,5 +1,6 @@
 const router = require('koa-router')()
 const goods = require('../data/goods.js')
+const allTypeGoods = require('../data/allTypesGoods.js')
 const userService = require('../controllers/mySqlController.js')
 
 
@@ -74,7 +75,7 @@ router.post('/cartAdd', async (ctx, next) => {
         }
       })
     } else {  //如没找到则添加成功，往数据库添加这条数据
-      await userService.cartAdd([id, username, name, price, max, min, shop, address, guarantee, imgUrl, num=min])
+      await userService.cartAdd([id, username, name, price, max, min, shop, address, guarantee, imgUrl, num = min])
         .then(res => {
           // console.log(res);
           if (res.affectedRows !== 0) {
@@ -103,8 +104,8 @@ router.post('/cartAdd', async (ctx, next) => {
 })
 
 router.post('/cartModify', async (ctx, next) => {
-  const {num,id}=ctx.request.body
-  await userService.cartModify(num,id).then(res => {
+  const { num, id } = ctx.request.body
+  await userService.cartModify(num, id).then(res => {
     // console.log(res);
     if (res.affectedRows !== 0) {
       ctx.body = {
@@ -120,5 +121,15 @@ router.post('/cartModify', async (ctx, next) => {
       }
     }
   })
+})
+
+
+//首页点击导航栏不同种类获取商品数据
+router.get('/type', async (ctx, next) => {
+  ctx.body={
+    code: '80000',
+    message: '获取商品数据成功',
+    data: allTypeGoods
+  }
 })
 module.exports = router

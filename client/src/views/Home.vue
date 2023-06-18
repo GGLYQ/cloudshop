@@ -1,45 +1,49 @@
 <template>
   <HomeHeader />
 
-  <!-- 轮播图 -->
-  <van-swipe :autoplay="3000" lazy-render>
-    <van-swipe-item v-for="image in images" :key="image">
-      <img :src="image" />
-    </van-swipe-item>
-  </van-swipe>
+  
 
-  <!-- 中间导航 -->
-  <ul class="nav-content">
-    <li class="nav-item" v-for="item in menuList" :key="item.categoryId">
-      <img :src="item.imgUrl" alt="">
-      <span>{{ item.name }}</span>
-    </li>
-  </ul>
+  <div>
+    <!-- 轮播图 -->
+    <van-swipe :autoplay="3000" lazy-render>
+      <van-swipe-item v-for="image in images" :key="image">
+        <img :src="image" />
+      </van-swipe-item>
+    </van-swipe>
 
-  <!-- 图片导航 -->
-  <div class="image-wrap" ref="imageWrap">
-    <ul class="image-content">
-      <li class="image-item" v-for="item in imageList" :key="item.categoryId">
-        <div class="img-color">
-          <img :src="item.imgUrl" alt="">
-          <div class="color" :style="`background:${item.background}`"></div>
-        </div>
-        <div class="img-desc">
-          <span>义务国际商贸城</span>
-          <span>{{ item.area }}</span>
-          <div class="smalltext">{{ item.content }}</div>
-        </div>
+    <!-- 中间导航 -->
+    <ul class="nav-content">
+      <li class="nav-item" v-for="item in menuList" :key="item.categoryId">
+        <img :src="item.imgUrl" alt="">
+        <span>{{ item.name }}</span>
       </li>
     </ul>
-  </div>
 
-  <!-- 商品列表 -->
-  <GoodsList/>
+    <!-- 图片导航 -->
+    <div class="image-wrap" ref="imageWrap">
+      <ul class="image-content">
+        <li class="image-item" v-for="item in imageList" :key="item.categoryId">
+          <div class="img-color">
+            <img :src="item.imgUrl" alt="">
+            <div class="color" :style="`background:${item.background}`"></div>
+          </div>
+          <div class="img-desc">
+            <span>义务国际商贸城</span>
+            <span>{{ item.area }}</span>
+            <div class="smalltext">{{ item.content }}</div>
+          </div>
+        </li>
+      </ul>
+    </div>
+
+    <!-- 商品列表 -->
+    <GoodsList />
+
+  </div>
 
   <div class="footer">
-    <Footer/>
+    <Footer />
   </div>
-  
 </template>
 
 <script setup>
@@ -263,7 +267,7 @@ nextTick(() => {
 
 
 
-.footer{
+.footer {
   position: fixed;
   bottom: 0;
 }
