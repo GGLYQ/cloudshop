@@ -1,6 +1,6 @@
 const allTypeGoods = [
   {
-    name: '玩具',
+    id: 1,
     goods: [
       {
         id: 0,
@@ -148,7 +148,7 @@ const allTypeGoods = [
     ]
   },
   {
-    name: '服装服饰',
+    id: 2,
     goods: [
       {
         id: 0,
@@ -296,7 +296,7 @@ const allTypeGoods = [
     ]
   },
   {
-    name: '饰品',
+    id: 3,
     goods: [
       {
         id: 0,
@@ -444,7 +444,7 @@ const allTypeGoods = [
     ]
   },
   {
-    name: '百货',
+    id: 4,
     goods: [
       {
         id: 0,
@@ -592,7 +592,7 @@ const allTypeGoods = [
     ]
   },
   {
-    name: '鞋靴',
+    id: 5,
     goods: [
       {
         id: 0,
@@ -740,7 +740,7 @@ const allTypeGoods = [
     ]
   },
   {
-    name: '箱包',
+    id: 6,
     goods: [
       {
         id: 0,
@@ -888,7 +888,7 @@ const allTypeGoods = [
     ]
   },
   {
-    name: '化妆品',
+    id: 7,
     goods: [
       {
         id: 0,
@@ -1036,7 +1036,7 @@ const allTypeGoods = [
     ]
   },
   {
-    name: '小家电',
+    id: 8,
     goods: [
       {
         id: 0,

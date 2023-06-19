@@ -24,6 +24,7 @@ import BetterScroll from 'better-scroll'
 import { reactive } from 'vue';
 import { nextTick } from 'vue';
 import { ref } from 'vue';
+import useGoodsStore from '@/store/goods.js'
 
 const navList =
   [
@@ -85,11 +86,13 @@ setTimeout(() => {
   scroll.navScroll.refresh()
 }, 500)
 
+const store=useGoodsStore()
 //点菜单的某一项
 let currentId = ref(0)
 const selectMenu = (id) => {
-  console.log(id);
+  // console.log(id);
   currentId.value = id
+  store.changeId(id)  //使点菜单的某一项的id传给pinia组件库
 }
 
 </script>

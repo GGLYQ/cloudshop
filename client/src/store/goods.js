@@ -1,20 +1,16 @@
 import {defineStore} from 'pinia'
-import axios from 'axios'
 
-const useGoodsStore=defineStore('cart',{
+const useGoodsStore=defineStore('goods',{
   state:()=>{  //放响应式数据源
     return{
-      badge:0
+      id:0
     }
   },
   actions:{
-    async changeBadge(){
-      const res =await axios.post('/cartList', {  //获取购物车数据
-        username: JSON.parse(sessionStorage.getItem('userInfo')).username
-      })
-      this.badge=res.data.length
+     changeId(id){
+      this.id=id
     }
   }
 })
 
-export default useCartStore
+export default useGoodsStore

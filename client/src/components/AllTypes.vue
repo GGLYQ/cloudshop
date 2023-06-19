@@ -1,15 +1,124 @@
 <template>
-  
+   <div class="goods-wrap">
+    <div class="goods-list">
+      <div class="goods-item" v-for="item in state.goodsData.goods" :key="item.id">
+        <img :src="item.imgUrl" alt="">
+        <div class="content">
+          <div class="name">{{ item.name }}</div>
+          <div class="desc">
+            <span class="price">￥{{ item.price }}</span>
+            <span class="min">{{ item.min }}个起批</span>
+          </div>
+          <div class="shop">{{ item.shop }}</div>
+          <div class="address">{{ item.address }}</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="goods-list">
+      <div class="goods-item" v-for="item in state.goodsData.goods" :key="item.id">
+        <img :src="item.imgUrl" alt="">
+        <div class="content">
+          <div class="name">{{ item.name }}</div>
+          <div class="desc">
+            <span class="price">￥{{ item.price }}</span>
+            <span class="min">{{ item.min }}个起批</span>
+          </div>
+          <div class="shop">{{ item.shop }}</div>
+          <div class="address">{{ item.address }}</div>
+        </div>
+      </div>
+    </div>
+</div>
 </template>
 
 <script setup>
-import { onMounted } from 'vue';
 import axios from 'axios';
+import { reactive } from 'vue';
+import useGoodsStore from '@/store/goods.js'
+import { watch } from 'vue';
 
-onMounted(async()=>{
-  const goodsData=await axios.get('/type')
-  console.log(goodsData);
+let state=reactive({
+  goodsData:{}
 })
+
+const store=useGoodsStore()
+
+watch(()=>store.id,(newVal)=>{
+  changeType(newVal)
+})
+
+const changeType=async(id)=>{
+  const allgoods=await axios.get('/type')
+state.goodsData=allgoods.data.find(item=>item.id===id)//拿到仓库的导航某一种类的id作为数组下标，刚好对应相应种类的数据
+console.log(state.goodsData); 
+}
+
+
 </script>
 
-<style lang="less" scoped></style>
+<style lang="less" scoped>
+.goods-wrap {
+  display: flex;
+  background: #f1f1f1;
+  border-radius: 5%;
+
+  .goods-list {
+    display: flex;
+    flex: 1;
+    flex-direction: column;
+    border-radius: 5%;
+    width: 45%;
+    height: 45%;
+    margin: 0 2.5px;
+
+    .goods-item {
+      background: #ffffff;
+      margin-bottom: 5px;
+      border-radius: 5%;
+      &:nth-last-child(1){
+        margin-bottom: 105px;
+      }
+      img {
+        width: 100%;
+        height: 100%;
+        border-radius: 5%;
+      }
+
+      .content {
+        margin: 0 10px;
+
+        .name {
+          color: #000000;
+          font-size: 12px;
+          font-weight: 500;
+          white-space: nowrap;
+          overflow: hidden;
+        }
+
+        .desc {
+          .price {
+            color: #ff0000;
+            font-size: 15px;
+          }
+
+          .min {
+            color: #858585;
+            font-size: xx-small;
+            margin-left: 5px;
+          }
+        }
+
+        .shop,
+        .address {
+          color: #858585;
+          font-size: xx-small;
+          white-space: nowrap;
+          overflow: hidden;
+        }
+      }
+
+    }
+  }
+}
+</style>

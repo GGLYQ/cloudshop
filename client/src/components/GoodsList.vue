@@ -63,13 +63,13 @@ const gotoDetail=(item)=>{
 .goods-wrap {
   display: flex;
   background: #f1f1f1;
-  border-radius: 5%;
+  border-radius: 5px;
 
   .goods-list {
     display: flex;
     flex: 1;
     flex-direction: column;
-    border-radius: 5%;
+    border-radius: 5px;
     width: 45%;
     height: 45%;
     margin: 0 2.5px;

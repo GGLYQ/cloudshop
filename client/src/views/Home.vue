@@ -1,9 +1,9 @@
 <template>
   <HomeHeader />
 
-  
+  <AllTypes v-if="selectId != 0" />
 
-  <div>
+  <div v-if="selectId == 0">
     <!-- 轮播图 -->
     <van-swipe :autoplay="3000" lazy-render>
       <van-swipe-item v-for="image in images" :key="image">
@@ -52,7 +52,13 @@ import GoodsList from '@/components/GoodsList.vue'
 import Footer from '@/components/Footer.vue'
 import { nextTick, ref } from 'vue';
 import BetterScroll from 'better-scroll'
+import AllTypes from '@/components/AllTypes.vue'
+import useGoodsStore from '@/store/goods.js'
+import { watch } from 'vue';
+import { onMounted } from 'vue';
 
+const store = useGoodsStore()
+//定义一个变量存储导航的id值，用来判断id值大于0则显示另一种类页面，不展示首页
 
 const images = [
   '../src/assets/images/lb1.jpg',
@@ -158,11 +164,23 @@ const _initScroll = () => {
 
 }
 
+let selectId = ref(0)
 
+onMounted(() => {
+  watch(() => store.id, (newVal) => {
+    selectId.value = newVal
+  })
+})
+
+
+
+// console.log(selectId);
 
 nextTick(() => {
   _initScroll()
 })
+
+
 </script>
 
 <style lang="less" scoped>
