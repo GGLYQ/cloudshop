@@ -1,7 +1,7 @@
 <template>
   <Header>
     <div class="head">
-      <div class="cross">
+      <div @click="gohome" class="cross">
         <van-icon name="cross" color="#fff" size="18px" />
       </div>
       <div class="link-register" @click="goRegister">
@@ -83,6 +83,11 @@ const onSubmit = async () => {
 //去注册
 const goRegister = () => {
   router.push('/register')
+}
+
+//没登录可让其看商品
+const gohome=()=>{
+  router.push('/home')
 }
 </script>
 

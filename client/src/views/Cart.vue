@@ -58,6 +58,10 @@ import { nextTick } from 'vue';
 import { showLoadingToast, closeToast } from 'vant';
 import { computed } from 'vue';
 import { watch } from 'vue';
+import { useRouter } from 'vue-router';
+import { showToast } from 'vant';
+
+
 
 const state = reactive({
   userData: {},
@@ -66,15 +70,25 @@ const state = reactive({
   checkedAll: false
 })
 
+const router = useRouter()
 //购物车列表
 nextTick(async () => {
   showLoadingToast({ message: '加载中', forbidClick: true, duration: 0 })
   state.userData = JSON.parse(sessionStorage.getItem('userInfo')) //拿到登录者的用户名以便查询他的购物车数据
-  const res = await axios.post('/cartList', {
-    username: state.userData.username
-  })
-  // console.log(res.data);
-  state.cartData = res.data;
+//判断sessionStorage里是否存在用户数据，不存在跳去登录，存在则获取其购物车数据
+  if (state.userData == null) {
+    setTimeout(() => {
+      showToast('您还未登录哦！');
+      router.push('/login')
+    }, 1000)
+  } else {
+    const res = await axios.post('/cartList', {
+      username: state.userData.username
+    })
+    // console.log(res.data);
+    state.cartData = res.data;
+  }
+
   closeToast()
 })
 
@@ -109,13 +123,13 @@ const totalPrice = computed(() => {
 //       state.result = state.cartData.map(item => item.id)
 //     }
 //   })
-  const allCheck=()=>{  //checked为true或false
-    if (!state.checkedAll) {
-      state.result = []
-    } else {
-      state.result = state.cartData.map(item => item.id)
-    }
+const allCheck = () => {  //checked为true或false
+  if (!state.checkedAll) {
+    state.result = []
+  } else {
+    state.result = state.cartData.map(item => item.id)
   }
+}
 
 //全部勾选时全选按钮也要勾选
 watch(
@@ -124,6 +138,11 @@ watch(
     state.checkedAll = state.cartData.length === newVal.length ? true : false
   }
 )
+
+//提交订单
+const onSubmit=()=>{
+  router.push('/orderSubmit')
+}
 </script>
 
 <style lang="less" scoped>

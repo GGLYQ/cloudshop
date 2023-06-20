@@ -1,9 +1,16 @@
 <template>
   <div class="header">
-    <div class="title">
+    <div class="title" v-if="state.userData !== null">
       你好，{{ state.userData.username }} !
       <div class="btn">
         编辑资料
+      </div>
+    </div>
+
+    <div class="title" v-else>
+      你好，请登录!
+      <div class="btn" @click="goLogin">
+        点击登录
       </div>
     </div>
 
@@ -50,12 +57,18 @@
 <script setup>
 import Footer from '@/components/Footer.vue'
 import { reactive } from 'vue';
+import { useRouter } from 'vue-router';
 
 const state = reactive({
   userData: {}
 })
 
 state.userData = JSON.parse(sessionStorage.getItem('userInfo')) //拿到登录者的用户名以便查询他的购物车数据
+
+const router = useRouter()
+const goLogin = () => {
+  router.push('/login')
+}
 </script>
 
 <style lang="less" scoped>
@@ -119,7 +132,7 @@ state.userData = JSON.parse(sessionStorage.getItem('userInfo')) //拿到登录�
       text-align: center;
 
       .iconfont {
-        color:#f86c35;
+        color: #f86c35;
         font-size: 20px;
       }
 
