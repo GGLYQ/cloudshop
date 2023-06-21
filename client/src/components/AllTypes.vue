@@ -54,7 +54,7 @@ onMounted(() => {
 const changeType = async (id) => {
   const allgoods = await axios.get('/type')
   state.goodsData = allgoods.data.find(item => item.id === id)//拿到仓库的导航某一种类的id作为数组下标，刚好对应相应种类的数据
-  console.log(state.goodsData);
+  // console.log(state.goodsData);
 }
 
 

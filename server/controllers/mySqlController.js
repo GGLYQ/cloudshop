@@ -49,41 +49,63 @@ const userfind = (username) => {
 
 //注册
 const userRegister = (values) => {
-  let _sql=`insert into users set username=?,password=?;`
-  return allService.query(_sql,values)
+  let _sql = `insert into users set username=?,password=?;`
+  return allService.query(_sql, values)
 }
 
 //根据用户名查找用户 根据用户名查找此用户购物车的数据 
-const cartList=(username)=>{
-  let _sql=`select * from cart where username="${username}";`
+const cartList = (username) => {
+  let _sql = `select * from cart where username="${username}";`
   return allService.query(_sql)
 }
 
 //在cart中查找商品id为多少的那一项以便添加数据
-const cartFind=(id)=>{
+const cartFind = (id) => {
   let _sql = `select * from cart where id="${id}";`
   return allService.query(_sql)
 }
 
 //添加前如存在此商品则让num加一并存入数据库
-const numAdd=(id)=>{
+const numAdd = (id) => {
   let _sql = `update cart set num=num+1 where id="${id}";`
   return allService.query(_sql)
 }
 
 //在cart中添加一条数据
-const cartAdd=(values) => {
-  let _sql=`insert into cart set id=?,username=?,name=?,price=?,max=?,min=?,shop=?,address=?,guarantee=?,imgUrl=?,num=?;`
-  return allService.query(_sql,values)
+const cartAdd = (values) => {
+  let _sql = `insert into cart set id=?,username=?,name=?,price=?,max=?,min=?,shop=?,address=?,guarantee=?,imgUrl=?,num=?;`
+  return allService.query(_sql, values)
 }
 
 //在购物车页面增加或减少商品数量数据库中的cart表的num字段也需修改
-const cartModify=(num,id)=>{
+const cartModify = (num, id) => {
   let _sql = `update cart set num="${num}" where id="${id}";`
   return allService.query(_sql)
 }
 
+//购物车数据删除
+const cartDelete = (id) => {
+  let _sql = `delete from cart where id="${id}";`
+  return allService.query(_sql)
+}
 
+//获取用户地址列表
+const addressList = (username) => {
+  let _sql = `select * from address where username="${username}";`
+  return allService.query(_sql)
+}
+
+//修改默认地址
+const defaultModify = (isDefault, id) => {
+  let _sql = `update address set isDefault="${isDefault}" where id="${id}";`
+  return allService.query(_sql)
+}
+
+//根据isDefault是否为1查询默认地址的那条数据
+const defaultFind = () => {
+  let _sql = `select * from address where isDefault=1;`
+  return allService.query(_sql)
+}
 module.exports = {
   userLogin,
 
@@ -94,6 +116,11 @@ module.exports = {
   cartFind,
   numAdd,
   cartAdd,
- 
-  cartModify
+
+  cartModify,
+  cartDelete,
+
+  addressList,
+  defaultModify,
+  defaultFind
 }

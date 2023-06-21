@@ -26,7 +26,7 @@
           </van-card>
 
           <template #right>
-            <van-button square text="删除" type="danger" class="delete-button" />
+            <van-button @click="cartDelete(item.id)" square text="删除" type="danger" class="delete-button" />
           </template>
         </van-swipe-cell>
       </van-checkbox-group>
@@ -36,7 +36,7 @@
 
   <div class="no-cart" v-else>购物车是空的，去逛逛吧</div>
 
-  <van-submit-bar class="sub-all" :price="totalPrice * 100" button-text="提交订单" @submit="onSubmit">
+  <van-submit-bar class="sub-all" :price="totalPrice * 100" button-text="结算" @submit="onSubmit">
     <van-checkbox v-model="state.checkedAll" @click="allCheck">全选</van-checkbox>
   </van-submit-bar>
 
@@ -60,8 +60,6 @@ import { computed } from 'vue';
 import { watch } from 'vue';
 import { useRouter } from 'vue-router';
 import { showToast } from 'vant';
-
-
 
 const state = reactive({
   userData: {},
@@ -141,7 +139,13 @@ watch(
 
 //提交订单
 const onSubmit=()=>{
-  router.push('/orderSubmit')
+  router.push({path:'/orderSubmit',query:state.result})
+}
+
+//删除购物车数据
+const cartDelete=async(id)=>{
+  await axios.post('/cartDelete',{'id':id})
+  window.location.reload();
 }
 </script>
 

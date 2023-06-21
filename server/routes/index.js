@@ -123,6 +123,44 @@ router.post('/cartModify', async (ctx, next) => {
   })
 })
 
+router.post('/cartDelete',async(ctx,next)=>{
+  const { id } = ctx.request.body
+  await userService.cartDelete(id).then(res => {
+    // console.log(res);
+    if (res.affectedRows !== 0) {
+      ctx.body = {
+        code: '80000',
+        data: 'success',
+        msg: '删除成功！'
+      }
+    } else {
+      ctx.body = {
+        code: '80004',
+        data: 'error',
+        msg: '删除失败！'
+      }
+    }
+  })
+})
+
+router.post('/cartFind',async(ctx,next)=>{
+  const { id } = ctx.request.body
+  let result=await userService.cartFind(id)
+    if (result.length) {
+      ctx.body = {
+        code: '80000',
+        data: result,
+        msg: '商品数据获取成功'
+      }
+    } else {
+      ctx.body = {
+        code: '80004',
+        data: 'null',
+        msg: '无此商品'
+      }
+    }
+  
+})
 
 //首页点击导航栏不同种类获取商品数据
 router.get('/type', async (ctx, next) => {
@@ -131,5 +169,68 @@ router.get('/type', async (ctx, next) => {
     message: '获取商品数据成功',
     data: allTypeGoods
   }
+})
+
+router.post('/addressList', async (ctx, next) => {
+  const { username } = ctx.request.body
+  try {
+    const result = await userService.addressList(username)
+    if (result.length) {
+      ctx.body = {
+        code: '80000',
+        data: result,
+        msg: '地址数据获取成功'
+      }
+    } else {
+      ctx.body = {
+        code: '80004',
+        data: 'null',
+        msg: '去设置一个地址吧！'
+      }
+    }
+  } catch (error) {
+    ctx.body = {
+      code: '80002',
+      data: error,
+      msg: '服务器异常'
+    }
+  }
+})
+
+router.post('/defaultModify', async (ctx, next) => {
+  const { isDefault, id } = ctx.request.body
+  await userService.defaultModify(isDefault, id).then(res => {
+    // console.log(res);
+    if (res.affectedRows !== 0) {
+      ctx.body = {
+        code: '80000',
+        data: 'success',
+        msg: '修改成功！'
+      }
+    } else {
+      ctx.body = {
+        code: '80004',
+        data: 'error',
+        msg: '修改失败！'
+      }
+    }
+  })
+})
+
+router.get('/defaultFind', async (ctx, next) => {
+  const result = await userService.defaultFind()
+    if (result.length) {
+      ctx.body = {
+        code: '80000',
+        data: result,
+        msg: '默认地址数据获取成功'
+      }
+    } else {
+      ctx.body = {
+        code: '80004',
+        data: 'null',
+        msg: '去设置一个地址吧！'
+      }
+    }
 })
 module.exports = router

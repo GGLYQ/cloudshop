@@ -45,6 +45,16 @@ const routes=[
     path:'/orderSubmit',
     name: 'orderSubmit',
     component:()=>import('@/views/OrderSubmit.vue') 
+  },
+  {
+    path:'/address',
+    name: 'address',
+    component:()=>import('@/views/Address.vue') 
+  },
+  {
+    path:'/addressAdd',
+    name: 'addressAdd',
+    component:()=>import('@/views/AddressAdd.vue') 
   }
 ]
 

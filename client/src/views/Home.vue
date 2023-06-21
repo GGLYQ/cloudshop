@@ -169,7 +169,7 @@ let selectId = ref(0)
 onMounted(() => {
   watch(() => store.id, (newVal) => {
     selectId.value = newVal
-    console.log(selectId.value);
+    // console.log(selectId.value);
   })
 })
 

@@ -3,40 +3,75 @@
 
   <div class="address-wrap" @click="gotoAddressList">
     <div class="name">
-      <span>收货人：张恬</span>
-      <span class="phone">13576979820</span>
+      <span>收货人：{{ state.defaultAddress.name }} </span>
+      <span class="phone">{{ state.defaultAddress.tel }}</span>
     </div>
     <div class="address">
-      江西省 南昌市 青山湖区 范家村
+      {{ state.defaultAddress.address }}
     </div>
     <van-icon name="arrow" class="arrow" />
   </div>
 
-  <div class="goods-wrap">
+  <div class="goods-wrap" v-for="item in state.orderData" :key="item[0].id">
     <div class="seller">
       <i class="iconfont icon-shangpu"></i>
-      八宝箱包
+      {{ item[0].shop }}
     </div>
 
-    <van-card num="2" price="2.00" title="商品标题" thumb="https://fastly.jsdelivr.net/npm/@vant/assets/ipad.jpeg" />
-  
+    <van-card :num="item[0].num" :price="`${item[0].price}.00`" :title="item[0].name" :thumb="item[0].imgUrl" />
+
     <div class="small-calc">
-      <span class="num">共2件商品 </span> 
-      <span class="small-sum">小计：￥4.00</span>
+      <span class="num">共{{item[0].num}}件商品 </span>
+      <span class="small-sum">小计：￥{{item[0].num*item[0].price}}</span>
     </div>
   </div>
 
-  <div class="goods-wrap">
-    <div class="seller">八宝箱包</div>
-    <van-card num="2" price="2.00" title="商品标题" thumb="https://fastly.jsdelivr.net/npm/@vant/assets/ipad.jpeg" />
-  </div>
 
-  <van-button @click="addAddress" class="btn" type="primary" block>新增地址</van-button>
+  <van-submit-bar class="sub-all" :price="state.totalPrice*100" button-text="提交订单" @submit="onSubmit">
+  </van-submit-bar>
 </template>
 
 <script setup>
 import Header from '@/components/Header.vue'
+import { useRoute, useRouter } from 'vue-router';
+import axios from '@/api/axios.js';
+import { reactive } from 'vue';
+import { onMounted } from 'vue';
 
+const state = reactive({
+  orderData: [],
+  totalPrice:0,
+  defaultAddress:{}
+})
+
+const router = useRouter()
+const onClickLeft = () => {
+  router.push('/cart')
+}
+
+ 
+const route = useRoute()
+// console.log(route.query);//用useRoute接收路由传过来的勾选商品id的数组
+onMounted(async () => {
+ //获取默认地址
+ const result=await axios.get('/defaultFind')
+  state.defaultAddress=result.data[0]
+  // console.log(state.defaultAddress);
+
+  //获取订单数据
+  for (let item in route.query) {
+    // console.log(route.query[item]);
+    let res = await axios.post('/cartFind', {
+      id: route.query[item]
+    })
+    state.totalPrice+=(res.data[0].price*res.data[0].num)
+    state.orderData.push(res.data);
+  }
+})
+
+const gotoAddressList=()=>{
+  router.push('/address')
+}
 </script>
 
 <style lang="less" scoped>
@@ -99,27 +134,29 @@ import Header from '@/components/Header.vue'
     line-height: 40px;
     padding: 0 15px;
     background: #ffffff;
-    .icon-shangpu{
+
+    .icon-shangpu {
       color: #f86c35;
       font-size: 18px;
     }
   }
-  .small-calc{
+
+  .small-calc {
     width: 100%;
     height: 50px;
     background: #ffffff;
     margin: 5px 0 10px 0;
     font-size: 15px;
-    .num{
-      
-    }
-    .small-sum{
-      color:#ff0000;
+    line-height: 50px;
+    padding-left: 200px;
+
+    .small-sum {
+      color: #ff0000;
     }
   }
 }
 
-.btn {
+.sub-all {
   position: fixed;
   bottom: 0;
   left: 0;
@@ -131,13 +168,16 @@ import Header from '@/components/Header.vue'
 .van-card__content {
   padding: 10px 0 !important;
 }
-.van-card__price{
+
+.van-card__price {
   color: #ff0000;
 }
-.van-card__title{
+
+.van-card__title {
   font-size: 14px;
 }
-body{
+
+body {
   background: #f8f8f8;
 
 }
