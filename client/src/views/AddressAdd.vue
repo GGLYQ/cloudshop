@@ -8,12 +8,19 @@
       <van-field v-model="state.tel" name="电话" label="电话" placeholder="电话"
         :rules="[{ required: true, message: '请填写电话' }]" />
 
-      <van-field v-model="result" is-link readonly name="area" label="地区选择" placeholder="点击选择省市区"
+      <van-field v-model="state.address" is-link readonly name="area" label="地区选择" placeholder="点击选择省市区"
         @click="showArea = true" />
       <van-popup v-model:show="showArea" position="bottom">
         <van-area :area-list="areaList" @confirm="onConfirm" @cancel="showArea = false" />
       </van-popup>
 
+      <van-cell center title="默认">
+        <template #right-icon>
+          <van-switch v-model="checked" @click="change"/>
+        </template>
+      </van-cell>
+
+      <van-button @click="addressAdd" type="primary" block>添加</van-button>
 
     </van-cell-group>
 
@@ -26,25 +33,44 @@ import axios from '@/api/axios.js'
 import { areaList } from '@vant/area-data';
 import { ref } from 'vue';
 import { reactive } from 'vue';
-
-const searchResult = ref([]);
+import { showSuccessToast } from 'vant';
 
 const state = reactive({
   name: '',
   tel: '',
   address: '',
-  detail: ''
+  isDefault:0,
+  userData:{}
 })
 
-const result = ref('');
+const checked = ref(false);
 const showArea = ref(false);
 const onConfirm = ({ selectedOptions }) => {
   showArea.value = false;
-  result.value = selectedOptions.map((item) => item.text).join('/');
+  state.address = selectedOptions.map((item) => item.text).join(' ');
 };
 
+//添加地址
+const addressAdd=async()=>{
+  state.userData = JSON.parse(sessionStorage.getItem('userInfo'))
+  const res=await axios.post('/addressAdd',{
+    username:state.userData.username,
+    name:state.name,
+    tel:state.tel,
+    address:state.address,
+    isDefault:state.isDefault
+  })
+  if (res.code === '80000') {
+    showSuccessToast('添加成功');
+    window.history.back();
+
+  }
+}
+
+//开关切换将isDefault的值改变
+const change=()=>{
+  state.isDefault=state.isDefault===0?1:0
+}
 </script>
 
-<style lang="less" scoped>
-
-</style>
+<style lang="less" scoped></style>

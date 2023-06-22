@@ -106,6 +106,12 @@ const defaultFind = () => {
   let _sql = `select * from address where isDefault=1;`
   return allService.query(_sql)
 }
+
+//在address中添加一条数据
+const addressAdd = (values) => {
+  let _sql = `insert into address set id=?,username=?,name=?,tel=?,address=?,isDefault=?;`
+  return allService.query(_sql, values)
+}
 module.exports = {
   userLogin,
 
@@ -122,5 +128,6 @@ module.exports = {
 
   addressList,
   defaultModify,
-  defaultFind
+  defaultFind,
+  addressAdd
 }
