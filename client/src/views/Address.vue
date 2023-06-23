@@ -3,7 +3,7 @@
 
   <div class="address-wrap">
     <van-address-list v-model="state.chosenAddressId" :list="state.addressData" default-tag-text="默认" @add="onAdd"
-      @edit="onEdit" />
+      @edit="onEdit" @select="change()" />
   </div>
 </template>
 
@@ -14,11 +14,12 @@ import { reactive } from 'vue';
 import { onMounted } from 'vue';
 import { watch } from 'vue';
 import { useRouter } from 'vue-router';
+import { ref } from 'vue';
 
 const state = reactive({
   addressData: [],
   userData: {},
-  chosenAddressId: 1
+  chosenAddressId: 0
 })
 
 onMounted(async () => {
@@ -30,20 +31,20 @@ onMounted(async () => {
   // console.log(state.addressData);
 })
 
-//修改数据库中的新选中的isDefault字段为true 旧的修改为false
-watch(() => state.chosenAddressId, async (newVal, oldVal) => {
+const change = async () => {
+  //修改数据库中的新选中的isDefault字段为true 旧的修改为false
+  const result = await axios.get('/defaultFind')
+  // console.log(result.data[0].id);
   await axios.post('/defaultModify', {
     isDefault: 0,
-    id: oldVal
+    id: result.data[0].id
   })
   await axios.post('/defaultModify', {
     isDefault: 1,
-    id: newVal
+    id: state.chosenAddressId
   })
-  state.chosenAddressId = newVal  //问题： watch内的newVal不能赋值给全局的变量
-  console.log(state.chosenAddressId);
   window.history.back();
-})
+}
 
 const onClickLeft = () => {
   window.history.back();
@@ -53,10 +54,14 @@ const router = useRouter()
 const onAdd = () => {
   router.push('/addressAdd')
 }
+const onEdit=(item,index)=>{
+  // console.log(item,index);
+  router.push({path:'/addressEdit',query:{id:index}})
+}
 </script>
 
 <style lang="less" scoped>
-.address-wrap{
+.address-wrap {
   margin-bottom: 50px;
 }
 </style>

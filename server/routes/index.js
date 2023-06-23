@@ -235,9 +235,9 @@ router.get('/defaultFind', async (ctx, next) => {
 })
 
 router.post('/addressAdd', async (ctx, next) => {
-  let { id,username, name, tel, address, isDefault } = ctx.request.body
+  let { id, username, name, tel, address, isDefault } = ctx.request.body
   try {
-    await userService.addressAdd([id,username, name, tel, address, isDefault])
+    await userService.addressAdd([id, username, name, tel, address, isDefault])
       .then(res => {
         // console.log(res);
         if (res.affectedRows !== 0) {
@@ -261,5 +261,44 @@ router.post('/addressAdd', async (ctx, next) => {
       msg: '服务器异常'
     }
   }
+})
+
+router.post('/addressFind', async (ctx, next) => {
+  const { id } = ctx.request.body
+  const result = await userService.addressFind(id)
+  if (result.length) {
+    ctx.body = {
+      code: '80000',
+      data: result,
+      msg: '地址数据获取成功'
+    }
+  } else {
+    ctx.body = {
+      code: '80004',
+      data: 'null',
+      msg: '没有此地址！'
+    }
+  }
+})
+
+router.post('/addressModify', async (ctx, next) => {
+  const { name, tel, address, id } = ctx.request.body
+  await userService.addressModify(name, tel, address, id)
+    .then(res => {
+      // console.log(res);
+      if (res.affectedRows !== 0) {
+        ctx.body = {
+          code: '80000',
+          data: 'success',
+          msg: '修改成功！'
+        }
+      } else {
+        ctx.body = {
+          code: '80004',
+          data: 'error',
+          msg: '修改失败！'
+        }
+      }
+    })
 })
 module.exports = router

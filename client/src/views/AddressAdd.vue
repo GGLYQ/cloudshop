@@ -16,7 +16,7 @@
 
       <van-cell center title="默认">
         <template #right-icon>
-          <van-switch v-model="checked" @click="change"/>
+          <van-switch v-model="checked" @click="change" />
         </template>
       </van-cell>
 
@@ -39,8 +39,8 @@ const state = reactive({
   name: '',
   tel: '',
   address: '',
-  isDefault:0,
-  userData:{}
+  isDefault: 0,
+  userData: {}
 })
 
 const checked = ref(false);
@@ -50,26 +50,37 @@ const onConfirm = ({ selectedOptions }) => {
   state.address = selectedOptions.map((item) => item.text).join(' ');
 };
 
+//开关切换将isDefault的值改变
+const change = () => {
+  state.isDefault = state.isDefault === 0 ? 1 : 0
+}
+
 //添加地址
-const addressAdd=async()=>{
+const addressAdd = async () => {
   state.userData = JSON.parse(sessionStorage.getItem('userInfo'))
-  const res=await axios.post('/addressAdd',{
-    username:state.userData.username,
-    name:state.name,
-    tel:state.tel,
-    address:state.address,
-    isDefault:state.isDefault
+  if (state.isDefault === 1) {
+    const result = await axios.get('/defaultFind')
+    console.log(result.data[0].id);
+    await axios.post('/defaultModify', {
+      isDefault: 0,
+      id: result.data[0].id
+    })
+  }
+  const res = await axios.post('/addressAdd', {
+    username: state.userData.username,
+    name: state.name,
+    tel: state.tel,
+    address: state.address,
+    isDefault: state.isDefault
   })
   if (res.code === '80000') {
     showSuccessToast('添加成功');
     window.history.back();
-
   }
 }
 
-//开关切换将isDefault的值改变
-const change=()=>{
-  state.isDefault=state.isDefault===0?1:0
+const onClickLeft = () => {
+  window.history.back();
 }
 </script>
 

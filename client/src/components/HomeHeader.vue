@@ -3,7 +3,7 @@
     <i class="iconfont icon-yingwen"></i>
     <div class="header-search">
       <i class="iconfont icon-sousuo"></i>
-      <router-Link to="/product-list" class="search-title">物美价廉，童叟无欺</router-Link>
+      <router-Link to="/product-list" class="search-title">义务购，放心购</router-Link>
       <i class="iconfont icon-zhaoxiangji"></i>
     </div>
     <i class="iconfont icon-saomiao"></i>

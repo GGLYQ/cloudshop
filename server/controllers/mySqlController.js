@@ -112,6 +112,18 @@ const addressAdd = (values) => {
   let _sql = `insert into address set id=?,username=?,name=?,tel=?,address=?,isDefault=?;`
   return allService.query(_sql, values)
 }
+
+//根据id查询地址
+const addressFind = (id) => {
+  let _sql = `select * from address where id="${id}";`
+  return allService.query(_sql)
+}
+
+//修改地址信息
+const addressModify=(name,tel,address,id)=>{
+  let _sql = `update address set name="${name}",tel="${tel}",address="${address}" where id="${id}";`
+  return allService.query(_sql)
+}
 module.exports = {
   userLogin,
 
@@ -129,5 +141,7 @@ module.exports = {
   addressList,
   defaultModify,
   defaultFind,
-  addressAdd
+  addressAdd,
+  addressFind,
+  addressModify
 }

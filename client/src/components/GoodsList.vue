@@ -55,8 +55,13 @@ getgoods()
 const router=useRouter()
 const gotoDetail=(item)=>{
   router.push({path:`/product/${item.id}`})
-  
 }
+
+const imgs = document.querySelectorAll('img');
+imgs.forEach(img => {
+  const height = img.clientHeight;
+  img.style.height = height + "px";
+});
 </script>
 
 <style lang="less" scoped>
@@ -71,20 +76,18 @@ const gotoDetail=(item)=>{
     flex-direction: column;
     border-radius: 5px;
     width: 45%;
-    height: 45%;
     margin: 0 2.5px;
 
     .goods-item {
       background: #ffffff;
       margin-bottom: 5px;
-      border-radius: 5%;
+      border-radius: 5%; 
+      overflow: hidden;
       &:nth-last-child(1){
         margin-bottom: 105px;
       }
       img {
-        width: 100%;
-        height: 100%;
-        border-radius: 5%;
+        border-radius: 5%;     
       }
 
       .content {
