@@ -1,7 +1,7 @@
 <template>
   <div class="home-header">
     <i class="iconfont icon-yingwen"></i>
-    <div class="header-search">
+    <div class="header-search" @click="goSearch">
       <i class="iconfont icon-sousuo"></i>
       <router-Link to="/product-list" class="search-title">义务购，放心购</router-Link>
       <i class="iconfont icon-zhaoxiangji"></i>
@@ -25,6 +25,7 @@ import { reactive } from 'vue';
 import { nextTick } from 'vue';
 import { ref } from 'vue';
 import useGoodsStore from '@/store/goods.js'
+import { useRouter } from 'vue-router';
 
 const navList =
   [
@@ -95,6 +96,10 @@ const selectMenu = (id) => {
   store.changeId(id)  //使点菜单的某一项的id传给pinia组件库
 }
 
+const router=useRouter()
+const goSearch=()=>{
+  router.push('/goodsSearch')
+}
 </script>
 
 <style lang="less" scoped>

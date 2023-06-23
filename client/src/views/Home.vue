@@ -3,7 +3,7 @@
 
   <AllTypes v-if="selectId != 0" />
 
-  <div v-if="selectId == 0">
+  <div v-else>
     <!-- 轮播图 -->
     <van-swipe :autoplay="3000" lazy-render>
       <van-swipe-item v-for="image in images" :key="image">

@@ -60,6 +60,11 @@ const routes=[
     path:'/addressEdit',
     name: 'addressEdit',
     component:()=>import('@/views/AddressEdit.vue') 
+  },
+  {
+    path:'/goodsSearch',
+    name: 'goodsSearch',
+    component:()=>import('@/views/GoodsSearch.vue') 
   }
 ]
 

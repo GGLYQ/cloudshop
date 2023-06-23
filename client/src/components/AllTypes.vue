@@ -16,7 +16,7 @@
     </div>
 
     <div class="goods-list">
-      <div class="goods-item" v-for="item in state.goodsData.goods" :key="item.id">
+      <div class="goods-item" @click="gotoDetail(item)" v-for="item in state.goodsData.goods1" :key="item.id">
         <img :src="item.imgUrl" alt="">
         <div class="content">
           <div class="name">{{ item.name }}</div>
@@ -37,6 +37,7 @@ import axios from 'axios';
 import { onMounted, reactive } from 'vue';
 import useGoodsStore from '@/store/goods.js'
 import { watch } from 'vue';
+import { useRouter } from 'vue-router';
 
 let state = reactive({
   goodsData: {}
@@ -48,16 +49,17 @@ onMounted(() => {
   watch(() => store.id, (newVal) => {
     changeType(newVal)
   })
-})
-
-
-const changeType = async (id) => {
+  const changeType = async (id) => {
   const allgoods = await axios.get('/type')
   state.goodsData = allgoods.data.find(item => item.id === id)//拿到仓库的导航某一种类的id作为数组下标，刚好对应相应种类的数据
   // console.log(state.goodsData);
 }
+})
 
-
+const router=useRouter()
+const gotoDetail=(item)=>{
+  router.push({path:`/product/${item.id}`})
+}
 </script>
 
 <style lang="less" scoped>
@@ -80,14 +82,13 @@ const changeType = async (id) => {
       background: #ffffff;
       margin-bottom: 5px;
       border-radius: 5%;
+      overflow: hidden;
 
       &:nth-last-child(1) {
         margin-bottom: 105px;
       }
 
       img {
-        width: 100%;
-        height: 100%;
         border-radius: 5%;
       }
 
