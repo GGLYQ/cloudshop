@@ -1,16 +1,16 @@
 <template>
   <div class="home-header">
     <van-icon name="arrow-left" color="#fff" size="30px" @click="leftClick"/>
-    <div class="header-search" @click="goSearch">
-      <router-Link class="search-title">义务购，放心购</router-Link>
-      <i class="iconfont icon-zhaoxiangji"></i>
-    </div>
+      <van-search clear-trigger="focus" shape="round" background="#f86c35" v-model="value" placeholder="请输入搜索关键词" />
     <i class="iconfont icon-sousuo"></i>
   </div>
 </template>
 
 <script setup>
+import { ref } from 'vue';
 import { useRouter } from 'vue-router';
+
+const value = ref('');
 
 const router=useRouter()
 const leftClick=()=>{
@@ -41,20 +41,18 @@ const leftClick=()=>{
     border-radius: 10px;
     line-height: 20px;
     padding: 0 10px;
-
-    .search-title {
-      padding: 5px 50px;
-    }
-
-    .icon-zhaoxiangji {
-      color: #9c9c9c;
-      font-size: 23px;
-    }
   }
 
   .icon-sousuo {
     color: #ffffff;
     font-size: 25px;
   }
+}
+</style>
+
+<style>
+.van-search{
+  height: 50px;
+  width: 270px;
 }
 </style>

@@ -1,45 +1,52 @@
 <template>
   <HomeHeader />
 
-  <AllTypes v-if="selectId != 0" />
+  <van-pull-refresh v-model="state.refreshing" @refresh="onRefresh">
 
-  <div v-else>
-    <!-- 轮播图 -->
-    <van-swipe :autoplay="3000" lazy-render>
-      <van-swipe-item v-for="image in images" :key="image">
-        <img :src="image" />
-      </van-swipe-item>
-    </van-swipe>
+    <div class="content">
+      <AllTypes v-if="selectId != 0" />
 
-    <!-- 中间导航 -->
-    <ul class="nav-content">
-      <li class="nav-item" v-for="item in menuList" :key="item.categoryId">
-        <img :src="item.imgUrl" alt="">
-        <span>{{ item.name }}</span>
-      </li>
-    </ul>
+      <div v-else>
+        <!-- 轮播图 -->
+        <van-swipe :autoplay="3000" lazy-render>
+          <van-swipe-item v-for="image in images" :key="image">
+            <img :src="image" />
+          </van-swipe-item>
+        </van-swipe>
 
-    <!-- 图片导航 -->
-    <div class="image-wrap" ref="imageWrap">
-      <ul class="image-content">
-        <li class="image-item" v-for="item in imageList" :key="item.categoryId">
-          <div class="img-color">
+        <!-- 中间导航 -->
+        <ul class="nav-content">
+          <li class="nav-item" v-for="item in menuList" :key="item.categoryId">
             <img :src="item.imgUrl" alt="">
-            <div class="color" :style="`background:${item.background}`"></div>
-          </div>
-          <div class="img-desc">
-            <span>义务国际商贸城</span>
-            <span>{{ item.area }}</span>
-            <div class="smalltext">{{ item.content }}</div>
-          </div>
-        </li>
-      </ul>
+            <span>{{ item.name }}</span>
+          </li>
+        </ul>
+
+        <!-- 图片导航 -->
+        <div class="image-wrap" ref="imageWrap">
+          <ul class="image-content">
+            <li class="image-item" v-for="item in imageList" :key="item.categoryId">
+              <div class="img-color">
+                <img :src="item.imgUrl" alt="">
+                <div class="color" :style="`background:${item.background}`"></div>
+              </div>
+              <div class="img-desc">
+                <span>义务国际商贸城</span>
+                <span>{{ item.area }}</span>
+                <div class="smalltext">{{ item.content }}</div>
+              </div>
+            </li>
+          </ul>
+        </div>
+
+        <!-- 商品列表 -->
+        <GoodsList />
+
+      </div>
     </div>
 
-    <!-- 商品列表 -->
-    <GoodsList />
+  </van-pull-refresh>
 
-  </div>
 
   <div class="footer">
     <Footer />
@@ -56,9 +63,22 @@ import AllTypes from '@/components/AllTypes.vue'
 import useGoodsStore from '@/store/goods.js'
 import { watch } from 'vue';
 import { onMounted } from 'vue';
+import { reactive } from 'vue';
 
 const store = useGoodsStore()
 //定义一个变量存储导航的id值，用来判断id值大于0则显示另一种类页面，不展示首页
+
+const state = reactive({
+  refreshing: false,
+  loading: false
+})
+
+const onRefresh = async() => {
+  console.log('刷新');
+  state.refreshing = true
+  await window.location.reload()
+  state.refreshing = false
+}
 
 const images = [
   '../src/assets/images/lb1.jpg',

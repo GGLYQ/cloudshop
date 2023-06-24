@@ -38,6 +38,8 @@ import { onMounted, reactive } from 'vue';
 import useGoodsStore from '@/store/goods.js'
 import { watch } from 'vue';
 import { useRouter } from 'vue-router';
+import { showLoadingToast,closeToast } from 'vant';
+
 
 let state = reactive({
   goodsData: {}
@@ -45,20 +47,20 @@ let state = reactive({
 
 const store = useGoodsStore()
 
-onMounted(() => {
-  watch(() => store.id, (newVal) => {
-    changeType(newVal)
-  })
-  const changeType = async (id) => {
+onMounted(async () => {
+  showLoadingToast({ message: '加载中', forbidClick: true, duration: 0 })
   const allgoods = await axios.get('/type')
-  state.goodsData = allgoods.data.find(item => item.id === id)//拿到仓库的导航某一种类的id作为数组下标，刚好对应相应种类的数据
-  // console.log(state.goodsData);
-}
+  state.goodsData = allgoods.data.find(item => item.id === store.id)
+  // state.goodsData = allgoods.data.find(item => item.id === 1)
+  watch(() => store.id, (newVal) => {
+    state.goodsData = allgoods.data.find(item => item.id === newVal)//拿到仓库的导航某一种类的id作为数组下标，刚好对应相应种类的数据
+  })
+  closeToast()
 })
 
-const router=useRouter()
-const gotoDetail=(item)=>{
-  router.push({path:`/product/${item.id}`})
+const router = useRouter()
+const gotoDetail = (item) => {
+  router.push({ path: `/product/${item.id}` })
 }
 </script>
 
