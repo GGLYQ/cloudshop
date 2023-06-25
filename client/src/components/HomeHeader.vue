@@ -1,9 +1,13 @@
 <template>
   <div class="home-header">
     <i class="iconfont icon-yingwen"></i>
-    <div class="header-search" @click="goSearch">
+    <div class="header-search">
       <i class="iconfont icon-sousuo"></i>
-      <router-Link to="/product-list" class="search-title">义务购，放心购</router-Link>
+      <router-Link to="/goodsSearch" class="search-title">
+          <van-swipe class="swipe" autoplay="4000" :show-indicators="false" style="height: 200px;" vertical>
+            <van-swipe-item v-for="item in state.swipTitle">{{ item }}</van-swipe-item>
+          </van-swipe>
+      </router-Link>
       <i class="iconfont icon-zhaoxiangji"></i>
     </div>
     <i class="iconfont icon-saomiao"></i>
@@ -25,7 +29,10 @@ import { reactive } from 'vue';
 import { nextTick } from 'vue';
 import { ref } from 'vue';
 import useGoodsStore from '@/store/goods.js'
-import { useRouter } from 'vue-router';
+
+const state=reactive({
+  swipTitle:['夏季畅销','精品首饰','夏季上新','防晒必备','台式空调']
+})
 
 const navList =
   [
@@ -87,18 +94,13 @@ setTimeout(() => {
   scroll.navScroll.refresh()
 }, 500)
 
-const store=useGoodsStore()
+const store = useGoodsStore()
 //点菜单的某一项
 let currentId = ref(0)
 const selectMenu = (id) => {
   // console.log(id);
   currentId.value = id
   store.changeId(id)  //使点菜单的某一项的id传给pinia组件库
-}
-
-const router=useRouter()
-const goSearch=()=>{
-  router.push('/goodsSearch')
 }
 </script>
 
@@ -127,6 +129,8 @@ const goSearch=()=>{
   }
 
   .header-search {
+    width: 240px;
+    height: 33px;
     display: flex;
     align-items: center;
     justify-content: space-between;
@@ -137,7 +141,14 @@ const goSearch=()=>{
     padding: 0 10px;
 
     .search-title {
-      padding: 5px 50px;
+      flex: 1;
+      height: 100%;
+      .swipe {
+        height: 100% !important;
+        line-height: 33px;
+        margin-left: 5px;
+        color: #5c5c5c;
+      }
     }
 
     .icon-sousuo {
@@ -148,6 +159,11 @@ const goSearch=()=>{
     .icon-zhaoxiangji {
       color: #9c9c9c;
       font-size: 23px;
+    }
+
+    .search {
+      border-radius: 10px;
+      position: relative;
     }
   }
 }
