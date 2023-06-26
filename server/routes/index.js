@@ -4,7 +4,7 @@ const allTypeGoods = require('../data/allTypesGoods.js')
 const userService = require('../controllers/mySqlController.js')
 
 
-router.get('/goodsList', async (ctx, next) => {
+router.get('/goodsList/', async (ctx, next) => {
   ctx.body = {
     code: '80000',
     message: '获取商品数据成功',
@@ -12,15 +12,23 @@ router.get('/goodsList', async (ctx, next) => {
   }
 })
 
-router.post('/productDetail/:id', async (ctx, next) => {
+router.post('/productDetail/:typeId/:id', async (ctx, next) => {
   console.log(ctx.params.id);
   const idx = parseInt(ctx.params.id)  //获取前端传过来的id
+  const typeidx = parseInt(ctx.params.typeId)
+
+  //推荐商品
   const product = goods.goodsList.find(item => item.id === idx) //查找id为前端传过来的id的那条数据
   const product1 = goods.goodsList1.find(item => item.id === idx)
+
+  //不同种类的商品
+  const product2 = (allTypeGoods.find(item => item.id === typeidx)).goods.filter(items => items.id === idx)
+  const product3 = (allTypeGoods.find(item => item.id === typeidx)).goods1.filter(items => items.id === idx)
+
   ctx.body = {
     code: '80000',
     message: '获取单条商品数据成功',
-    data: product || product1
+    data: product || product1 || product2[0] || product3[0]
   }
 })
 

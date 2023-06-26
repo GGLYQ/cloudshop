@@ -1,7 +1,7 @@
 <template>
   <div class="goods-wrap">
     <div class="goods-list">
-      <div class="goods-item" v-for="item in state.goodsData.goods" :key="item.id">
+      <div class="goods-item" @click="gotoDetail(item)" v-for="item in state.goodsData" :key="item.id">
         <img :src="item.imgUrl" alt="">
         <div class="content">
           <div class="name">{{ item.name }}</div>
@@ -16,7 +16,7 @@
     </div>
 
     <div class="goods-list">
-      <div class="goods-item" @click="gotoDetail(item)" v-for="item in state.goodsData.goods1" :key="item.id">
+      <div class="goods-item" @click="gotoDetail(item)" v-for="item in state.goodsData1" :key="item.id">
         <img :src="item.imgUrl" alt="">
         <div class="content">
           <div class="name">{{ item.name }}</div>
@@ -42,7 +42,8 @@ import { showLoadingToast,closeToast } from 'vant';
 
 
 let state = reactive({
-  goodsData: {}
+  goodsData: {},
+  goodsData1: {}
 })
 
 const store = useGoodsStore()
@@ -50,8 +51,8 @@ const store = useGoodsStore()
 onMounted(async () => {
   showLoadingToast({ message: '加载中', forbidClick: true, duration: 0 })
   const allgoods = await axios.get('/type')
-  state.goodsData = allgoods.data.find(item => item.id === store.id)
-  // state.goodsData = allgoods.data.find(item => item.id === 1)
+  state.goodsData = allgoods.data.find(item => item.id === store.id).goods
+  state.goodsData1 = allgoods.data.find(item => item.id === store.id).goods1
   watch(() => store.id, (newVal) => {
     state.goodsData = allgoods.data.find(item => item.id === newVal)//拿到仓库的导航某一种类的id作为数组下标，刚好对应相应种类的数据
   })

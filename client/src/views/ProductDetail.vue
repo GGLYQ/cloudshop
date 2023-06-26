@@ -56,7 +56,9 @@ import Header from '@/components/Header.vue'
 import GoodsList from '@/components/GoodsList.vue'
 import { showToast } from 'vant';
 import useCartStore from '@/store/cart.js'
+import useGoodsStore from '@/store/goods.js'
 
+const store = useGoodsStore()
 const cart = useCartStore()
 
 const state = reactive({
@@ -70,10 +72,9 @@ onMounted(async () => {
   cart.changeBadge()  //购物车角标更新
 
   const { id } = route.params
-  const { data } = await axios.post(`/productDetail/${id}`)
+  const { data } = await axios.post(`/productDetail/${store.id}/${id}`)
   state.allImgUrl = data.allImgUrl
   state.productDetail = data
-
   state.userData = JSON.parse(sessionStorage.getItem('userInfo')) //拿到登录者的用户名以便查询他的购物车数据
 })
 
