@@ -12,6 +12,33 @@ router.get('/goodsList/', async (ctx, next) => {
   }
 })
 
+router.post('/goodsFind/:title', async (ctx, next) => {
+  const searchTitle = ctx.params.title
+  let result = []
+  let result1=[]
+  allTypeGoods.forEach((type,index) => {
+    type.goods.forEach(goods => {
+      if (goods.name.includes(searchTitle)) {
+        result.push(goods)
+        goods.typeId=index
+      }
+    })
+    type.goods1.forEach(goods1 => {
+      if (goods1.name.includes(searchTitle)) {
+        result.push(goods1)
+        goods1.typeId=index
+      }
+    })
+  })
+ result1=result.slice(0, result.length/2)
+ result.splice(0, result.length/2)
+  ctx.body = {
+    code: '80000',
+    message: '获取商品数据成功',
+    data: [result,result1]
+  }
+})
+
 router.post('/productDetail/:typeId/:id', async (ctx, next) => {
   console.log(ctx.params.id);
   const idx = parseInt(ctx.params.id)  //获取前端传过来的id

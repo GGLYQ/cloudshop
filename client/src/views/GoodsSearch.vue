@@ -15,7 +15,7 @@
     </div>
 
     <div class="logs-content">
-      <div class="logs-item" v-for="(item,index) in allLogs" :key="index">
+      <div class="logs-item" @click="fullTitle(item)" v-for="(item,index) in allLogs" :key="index">
         <div class="logs-container">{{ item }}</div>
       </div>
     </div>
@@ -67,6 +67,9 @@ const clear = () => {  //清除历史搜索
   window.location.reload()
 }
 
+const fullTitle=(item)=>{
+  value.value=item
+}
 </script>
 
 <style lang="less" scoped>

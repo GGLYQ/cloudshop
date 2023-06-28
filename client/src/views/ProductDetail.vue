@@ -78,9 +78,8 @@ onMounted(async () => {
   state.userData = JSON.parse(sessionStorage.getItem('userInfo')) //拿到登录者的用户名以便查询他的购物车数据
 })
 
-const router = useRouter()
 const onClickLeft = () => {
-  router.push('/home')
+  window.history.back();
 }
 
 

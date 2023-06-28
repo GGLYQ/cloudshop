@@ -124,6 +124,8 @@ const addressModify=(name,tel,address,id)=>{
   let _sql = `update address set name="${name}",tel="${tel}",address="${address}" where id="${id}";`
   return allService.query(_sql)
 }
+
+
 module.exports = {
   userLogin,
 
