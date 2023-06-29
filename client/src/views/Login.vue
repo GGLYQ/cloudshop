@@ -43,9 +43,8 @@
       <span>本机号码一键登录</span>
     </div>
     <div class="pg">
-      <i class="iconfont icon-pingguo" style="color:rgb(60, 67, 75)"></i>
-      <span>苹果登录</span>
-
+      <i class="iconfont icon-gitee" style="color:rgb(169, 21, 21)"></i>
+      <span><a href="https://gitee.com/oauth/authorize?client_id=52780e318c1ebdcddeb8718a0370c1017c51bbc2daab8bf0853fba9913abfdc3&redirect_uri=http%3A%2F%2F127.0.0.1%3A8080%2Fhome&response_type=code">Gitee登录</a></span>
     </div>
   </div>
 </template>

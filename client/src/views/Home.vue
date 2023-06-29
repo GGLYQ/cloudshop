@@ -64,6 +64,13 @@ import useGoodsStore from '@/store/goods.js'
 import { watch } from 'vue';
 import { onMounted } from 'vue';
 import { reactive } from 'vue';
+import { useRoute } from 'vue-router';
+import axios from 'axios'
+
+const route = useRoute()
+const { code } = route.query
+console.log(code);
+
 
 const store = useGoodsStore()
 //定义一个变量存储导航的id值，用来判断id值大于0则显示另一种类页面，不展示首页
@@ -73,7 +80,7 @@ const state = reactive({
   loading: false
 })
 
-const onRefresh = async() => {
+const onRefresh = async () => {
   console.log('刷新');
   state.refreshing = true
   await window.location.reload()
@@ -186,11 +193,24 @@ const _initScroll = () => {
 
 let selectId = ref(0)
 
-onMounted(() => {
+onMounted(async () => {
   watch(() => store.id, (newVal) => {
     selectId.value = newVal
     // console.log(selectId.value);
   })
+  // const res = await axios.post(`https://gitee.com/oauth/token?grant_type=authorization_code&code=${code}&client_id=52780e318c1ebdcddeb8718a0370c1017c51bbc2daab8bf0853fba9913abfdc3&redirect_uri=http://127.0.0.1:8080/home&client_secret=8bd8f42f23c41944046074264c56532b043dbbe88ca1eeb48ff4c44bd80b294d`)
+
+
+  $.ajax({
+    url: `https://gitee.com/oauth/token?grant_type=authorization_code&code=${code}&client_id=52780e318c1ebdcddeb8718a0370c1017c51bbc2daab8bf0853fba9913abfdc3&redirect_uri=http://127.0.0.1:8080/home&client_secret=8bd8f42f23c41944046074264c56532b043dbbe88ca1eeb48ff4c44bd80b294d`,
+    
+    success: function (res) {
+      console.log(res);
+    }
+  })
+  // setTimeout(() => {
+  //   console.log(res);
+  // }, 2000)
 })
 
 
