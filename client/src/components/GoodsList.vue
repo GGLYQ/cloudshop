@@ -38,6 +38,8 @@ import { reactive } from 'vue';
 import {useRouter} from 'vue-router';
 import { showLoadingToast,closeToast } from 'vant';
 
+const router=useRouter()
+
 const state = reactive({
   goodsList: [],
   goodsList1: []
@@ -52,7 +54,6 @@ const getgoods = async () => {
 }
 getgoods()
 
-const router=useRouter()
 const gotoDetail=(item)=>{
   router.push({path:`/product/${item.id}`})
 }

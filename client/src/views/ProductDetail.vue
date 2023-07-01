@@ -4,7 +4,7 @@
   </div>
 
   <van-swipe>
-    <van-swipe-item v-for="item in state.allImgUrl">
+    <van-swipe-item @click="state.show = true" v-for="item in state.allImgUrl">
       <img :src="item" alt="">
     </van-swipe-item>
 
@@ -45,6 +45,8 @@
       <van-action-bar-button @click="goToAddCart" type="danger" text="立即购买" />
     </van-action-bar>
   </div>
+
+  <Model v-show="state.show" @hidden="handle"/>
 </template>
 
 <script setup>
@@ -57,31 +59,23 @@ import GoodsList from '@/components/GoodsList.vue'
 import { showToast } from 'vant';
 import useCartStore from '@/store/cart.js'
 import useGoodsStore from '@/store/goods.js'
+import Model from '@/components/Model.vue'
+
 
 const store = useGoodsStore()
 const cart = useCartStore()
+const route = useRoute()
 
 const state = reactive({
   allImgUrl: [],
   productDetail: [],
-  userData: {}
-})
-
-const route = useRoute()
-onMounted(async () => {
-  cart.changeBadge()  //购物车角标更新
-
-  const { id } = route.params
-  const { data } = await axios.post(`/productDetail/${store.id}/${id}`)
-  state.allImgUrl = data.allImgUrl
-  state.productDetail = data
-  state.userData = JSON.parse(sessionStorage.getItem('userInfo')) //拿到登录者的用户名以便查询他的购物车数据
+  userData: {},
+  show: false
 })
 
 const onClickLeft = () => {
   window.history.back();
 }
-
 
 const gotoCart = () => {
   //跳转到购物车页面
@@ -108,10 +102,7 @@ const addCart = async () => {
     cart.changeBadge()  //购物车角标更新
     showToast(res.msg);
   }
-
-
 }
-
 
 const goToAddCart = async () => {
   //先往购物车数据中植入一条数据
@@ -139,6 +130,18 @@ const goToAddCart = async () => {
   }
 }
 
+onMounted(async () => {
+  cart.changeBadge()  //购物车角标更新
+  const { id } = route.params
+  const { data } = await axios.post(`/productDetail/${store.id}/${id}`)
+  state.allImgUrl = data.allImgUrl
+  state.productDetail = data
+  state.userData = JSON.parse(sessionStorage.getItem('userInfo')) //拿到登录者的用户名以便查询他的购物车数据
+})
+
+const handle=(e)=>{
+  state.show=e
+}
 </script>
 
 <style lang="less" scoped>
@@ -242,4 +245,5 @@ const goToAddCart = async () => {
   position: fixed;
   bottom: 0;
 }
+
 </style>

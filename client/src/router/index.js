@@ -24,7 +24,7 @@ const routes=[
   {
     path:'/category',
     name: 'category',
-    component:()=>import('@/views/Category.vue')
+    component:()=>import('@/views/Circle.vue')
   },
   {
     path:'/cart',
