@@ -16,6 +16,7 @@
 
       <van-button @click="addressEdit" type="primary" block>确认修改</van-button>
 
+      <van-button class="delete" @click="addressDelete" type="primary" block>删除</van-button>
     </van-cell-group>
 
   </van-form>
@@ -68,6 +69,20 @@ const addressEdit = async () => {
     window.history.back();
   }
 }
+
+const addressDelete = async () => {
+  const res = await axios.post('/addressDelete', {
+    id: route.query.id
+  })
+  if (res.code === '80000') {
+    showSuccessToast('删除成功');
+    window.history.back();
+  }
+}
 </script>
 
-<style lang="less" scoped></style>
+<style lang="less" scoped>
+.delete{
+  margin-top: 10px;
+}
+</style>

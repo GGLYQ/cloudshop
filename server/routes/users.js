@@ -38,9 +38,6 @@ router.post('/login', async (ctx, next) => {
   }
 })
 
-//Gitee登录
-// router.post('/')
-
 //注册接口
 router.post('/register', async (ctx, next) => {
   const { username, password } = ctx.request.body

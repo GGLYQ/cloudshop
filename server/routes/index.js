@@ -336,4 +336,23 @@ router.post('/addressModify', async (ctx, next) => {
       }
     })
 })
+
+router.post('/addressDelete', async (ctx, next) => {
+  const { id } = ctx.request.body
+  await userService.addressDelete(id).then(res => {
+    if (res.affectedRows !== 0) {
+      ctx.body = {
+        code: '80000',
+        data: 'success',
+        msg: '删除成功！'
+      }
+    } else {
+      ctx.body = {
+        code: '80004',
+        data: 'error',
+        msg: '删除失败！'
+      }
+    }
+  })
+})
 module.exports = router

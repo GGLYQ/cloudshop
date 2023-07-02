@@ -21,13 +21,13 @@
     <van-card :num="item[0].num" :price="`${item[0].price}.00`" :title="item[0].name" :thumb="item[0].imgUrl" />
 
     <div class="small-calc">
-      <span class="num">共{{item[0].num}}件商品 </span>
-      <span class="small-sum">小计：￥{{item[0].num*item[0].price}}</span>
+      <span class="num">共{{ item[0].num }}件商品 </span>
+      <span class="small-sum">小计：￥{{ item[0].num * item[0].price }}</span>
     </div>
   </div>
 
 
-  <van-submit-bar class="sub-all" :price="state.totalPrice*100" button-text="提交订单" @submit="onSubmit">
+  <van-submit-bar class="sub-all" :price="state.totalPrice * 100" button-text="提交订单" @submit="onSubmit">
   </van-submit-bar>
 </template>
 
@@ -40,8 +40,8 @@ import { onMounted } from 'vue';
 
 const state = reactive({
   orderData: [],
-  totalPrice:0,
-  defaultAddress:{}
+  totalPrice: 0,
+  defaultAddress: {}
 })
 
 const router = useRouter()
@@ -49,13 +49,14 @@ const onClickLeft = () => {
   router.push('/cart')
 }
 
- 
+
 const route = useRoute()
 // console.log(route.query);//用useRoute接收路由传过来的勾选商品id的数组
 onMounted(async () => {
- //获取默认地址
- const result=await axios.get('/defaultFind')
-  state.defaultAddress=result.data[0]
+  //获取默认地址
+  const result = await axios.get('/defaultFind')
+  console.log(result);
+  state.defaultAddress = result.data[0]
   // console.log(state.defaultAddress);
 
   //获取订单数据
@@ -64,12 +65,12 @@ onMounted(async () => {
     let res = await axios.post('/cartFind', {
       id: route.query[item]
     })
-    state.totalPrice+=(res.data[0].price*res.data[0].num)
+    state.totalPrice += (res.data[0].price * res.data[0].num)
     state.orderData.push(res.data);
   }
 })
 
-const gotoAddressList=()=>{
+const gotoAddressList = () => {
   router.push('/address')
 }
 </script>

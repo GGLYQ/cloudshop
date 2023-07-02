@@ -125,7 +125,11 @@ const addressModify=(name,tel,address,id)=>{
   return allService.query(_sql)
 }
 
-
+//地址删除
+const addressDelete = (id) => {
+  let _sql = `delete from address where id="${id}";`
+  return allService.query(_sql)
+}
 module.exports = {
   userLogin,
 
@@ -145,5 +149,6 @@ module.exports = {
   defaultFind,
   addressAdd,
   addressFind,
-  addressModify
+  addressModify,
+  addressDelete
 }

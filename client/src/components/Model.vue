@@ -16,16 +16,6 @@ import { useRoute } from 'vue-router';
 
 const route = useRoute()
 const { id } = route.params
-//3d模型
-
-//各个部位的材质
-const bodyMaterial = new THREE.MeshPhysicalMaterial({
-  color: 0xff0000,
-  metalness: 1,
-  roughness: 0.1,
-  clearcoat: 1,  //清漆
-  clearcoatRoughness: 0
-})
 
 const canvasDom = ref(null)
 
@@ -50,6 +40,7 @@ const render = () => {
 onMounted(() => {
   //渲染
   canvasDom.value.appendChild(renderer.domElement)
+
   // 设置背景颜色并启用透明度
   renderer.setClearColor(0x000000, 0.2);
   render()
@@ -67,18 +58,10 @@ onMounted(() => {
   loader.setDRACOLoader(dracoLoader)
   //判断../../public/model/${id}.glb是否存在，不存在则不加载
 
-
   loader.load(`../../public/model/${id}.glb`, (gltf) => {  //传id让其点击不同商品展示不同模型 id对应商品的id
     // console.log(gltf.scene);
     const bmw = gltf.scene
-    bmw.scale.set(0.2, 0.2, 0.2);
-    //遍历整个模型组
-    bmw.traverse((child) => {
-      // console.log(child);
-      if (child.isMesh && child.name.includes('Sketchfab')) {
-        child.material = bodyMaterial
-      }
-    })
+    bmw.scale.set(0.2, 0.2, 0.2); //模型缩放
     scene.add(bmw) //将整个模型组添加到场景中
   })
 
