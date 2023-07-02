@@ -14,7 +14,7 @@
       </div>
     </div>
 
-    <div class="handle">
+    <div class="handle" @click="signOut">
       <i class="iconfont icon-shezhi"></i>
     </div>
   </div>
@@ -68,6 +68,11 @@ state.userData = JSON.parse(sessionStorage.getItem('userInfo')) //拿到登录�
 const router = useRouter()
 const goLogin = () => {
   router.push('/login')
+}
+
+const signOut=()=>{
+  router.push('/login')
+  sessionStorage.removeItem('userInfo')
 }
 </script>
 

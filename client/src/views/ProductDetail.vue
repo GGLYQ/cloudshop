@@ -65,6 +65,7 @@ import Model from '@/components/Model.vue'
 const store = useGoodsStore()
 const cart = useCartStore()
 const route = useRoute()
+const router=useRouter()
 
 const state = reactive({
   allImgUrl: [],

@@ -1,8 +1,8 @@
 <template>
   <Transition name="fade">
-  <div class="wrapper" @click.stop="hide">
-    <div class="canvas-container" ref="canvasDom"></div>
-  </div>
+    <div class="wrapper" @click.stop="hide">
+      <div class="canvas-container" ref="canvasDom"></div>
+    </div>
   </Transition>
 </template>
 
@@ -14,11 +14,11 @@ import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader'
 import { DRACOLoader } from 'three/examples/jsm/loaders/DRACOLoader';
 import { useRoute } from 'vue-router';
 
-const route=useRoute()
+const route = useRoute()
 const { id } = route.params
 //3d模型
 
-//车身各个部位的材质
+//各个部位的材质
 const bodyMaterial = new THREE.MeshPhysicalMaterial({
   color: 0xff0000,
   metalness: 1,
@@ -32,12 +32,12 @@ const canvasDom = ref(null)
 //场景
 const scene = new THREE.Scene()
 //渲染器
-const renderer = new THREE.WebGLRenderer({ antialias: true, setAlpha: true })
+const renderer = new THREE.WebGLRenderer({ antialias: true, setAlpha: true })  //setAlpha让其可设置透明度
 renderer.setSize(window.innerWidth, window.innerHeight)
 //镜头
 const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000)
 camera.position.set(10, 10, 10)
-camera.lookAt(0,0,0)
+camera.lookAt(0, 0, 0)
 const controls = new OrbitControls(camera, renderer.domElement)
 
 // 渲染函数
@@ -65,7 +65,10 @@ onMounted(() => {
   const dracoLoader = new DRACOLoader()
   dracoLoader.setDecoderPath('../../public/draco/gltf/')
   loader.setDRACOLoader(dracoLoader)
-  loader.load(`../../public/model/${id}.glb`, (gltf) => {
+  //判断../../public/model/${id}.glb是否存在，不存在则不加载
+
+
+  loader.load(`../../public/model/${id}.glb`, (gltf) => {  //传id让其点击不同商品展示不同模型 id对应商品的id
     // console.log(gltf.scene);
     const bmw = gltf.scene
     bmw.scale.set(0.2, 0.2, 0.2);
@@ -78,7 +81,8 @@ onMounted(() => {
     })
     scene.add(bmw) //将整个模型组添加到场景中
   })
-})
+
+});
 
 //灯光
 const light = new THREE.DirectionalLight(0xffffff, 1)
@@ -110,13 +114,14 @@ light9.position.set(-5, 10, 0);
 scene.add(light9);
 
 
-
 //创建一个事件名hidden
 const emits = defineEmits(['hidden'])  //子父通信
 const hide = () => {
   //发散出去一个事件hidden 且携带一个参数值false
   emits('hidden', false)
 }
+
+
 </script>
 
 <style lang="less" scoped>
@@ -129,6 +134,7 @@ const hide = () => {
     width: 100%;
     height: 100%;
   }
+
   &.fade-enter-from,
   &.fade-leave-to {
     opacity: 0;
@@ -139,5 +145,6 @@ const hide = () => {
   &.fade-leave-active {
     transition: all 0.5s ease
   }
+
 }
 </style>

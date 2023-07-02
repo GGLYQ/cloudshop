@@ -9,7 +9,7 @@
     </ul>
   </div>
 
-  
+
   <canvas ref="canvasRef"></canvas>
 
   <Footer />
@@ -52,7 +52,7 @@ const goLook = (url) => {
 
 onMounted(() => {
   const scene = new THREE.Scene()
-  
+
   const camera = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, 0.1, 1000)
   camera.position.set(0, 0, 30)
   const renderer = new THREE.WebGLRenderer({ canvas: canvasRef.value, antialias: true })
@@ -75,7 +75,11 @@ onMounted(() => {
       scene.background = crt.texture
     })
   })
-
+  cubeTextureLoader.load(store.loadUrl, (texture) => {
+    const crt = new THREE.WebGLCubeRenderTarget(texture.image.height)
+    crt.fromEquirectangularTexture(renderer, texture)  //把全景图转换为纹理格式
+    scene.background = crt.texture
+  })
 
   //渲染
   renderer.setClearColor(0xcccccc)

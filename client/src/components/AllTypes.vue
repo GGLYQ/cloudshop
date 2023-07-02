@@ -54,7 +54,9 @@ onMounted(async () => {
   state.goodsData = allgoods.data.find(item => item.id === store.id).goods
   state.goodsData1 = allgoods.data.find(item => item.id === store.id).goods1
   watch(() => store.id, (newVal) => {
-    state.goodsData = allgoods.data.find(item => item.id === newVal)//拿到仓库的导航某一种类的id作为数组下标，刚好对应相应种类的数据
+    // console.log(newVal);
+    state.goodsData = allgoods.data.find(item => item.id === newVal).goods//拿到仓库的导航某一种类的id作为数组下标，刚好对应相应种类的数据
+    state.goodsData1 = allgoods.data.find(item => item.id === newVal).goods1
   })
   closeToast()
 })
