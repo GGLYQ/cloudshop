@@ -48,8 +48,8 @@ const goSearch = () => {
     if (localStorage.getItem('logs')) {  //重新回到页面也能·得到记录 持久化
       JSON.parse(localStorage.getItem('logs')).forEach(item => state.logs.push(item))
     }
-    setLogs(value.value)
-    router.push({path:'/resultSearch',query:{name:value.value}})
+    setLogs(value.value.trim())
+    router.push({path:'/resultSearch',query:{name:value.value.trim()}})
     value.value = ''
   } else {  //什么都没输时按默认值搜索
     if (localStorage.getItem('logs')) {  //重新回到页面也能·得到记录 持久化
