@@ -26,6 +26,7 @@
 import { reactive } from 'vue';
 import { ref } from 'vue';
 import { useRouter } from 'vue-router';
+import {debounce} from 'lodash';
 
 const value = ref('');  //搜索框的值
 const state = reactive({
@@ -43,7 +44,7 @@ const setLogs = (val) => {
   localStorage.setItem('logs', JSON.stringify(state.logs)) //存入localStorage
 }
 
-const goSearch = () => {
+const goSearch = debounce(() => {
   if (value.value.trim()) {  //防止输入空格跳转
     if (localStorage.getItem('logs')) {  //重新回到页面也能·得到记录 持久化
       JSON.parse(localStorage.getItem('logs')).forEach(item => state.logs.push(item))
@@ -59,7 +60,7 @@ const goSearch = () => {
     router.push({path:'/resultSearch',query:{name:'夏季畅销'}})
     value.value = ''
   }
-}
+},1000)
 
 const clear = () => {  //清除历史搜索
   state.logs = []

@@ -5,7 +5,7 @@
 
   <van-swipe>
     <van-swipe-item @click="state.show = true" v-for="item in state.allImgUrl">
-      <img :src="item" alt="">
+      <img v-lazy="item" alt="">
     </van-swipe-item>
 
     <template #indicator="{ active }">

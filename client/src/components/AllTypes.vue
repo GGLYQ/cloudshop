@@ -2,7 +2,7 @@
   <div class="goods-wrap">
     <div class="goods-list">
       <div class="goods-item" @click="gotoDetail(item)" v-for="item in state.goodsData" :key="item.id">
-        <img :src="item.imgUrl" alt="">
+        <img v-lazy="item.imgUrl" alt="">
         <div class="content">
           <div class="name">{{ item.name }}</div>
           <div class="desc">
