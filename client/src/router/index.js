@@ -39,7 +39,7 @@ const routes=[
   {
     path:'/product/:id',
     name: 'product',
-    component:()=>import('@/views/productDetail.vue') 
+    component:()=>import('@/views/ProductDetail.vue') 
   },
   {
     path:'/orderSubmit',
