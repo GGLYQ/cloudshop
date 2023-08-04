@@ -3,6 +3,11 @@ const goods = require('../data/goods.js')
 const allTypeGoods = require('../data/allTypesGoods.js')
 const userService = require('../controllers/mySqlController.js')
 
+router.get('/', async (ctx, next) => {
+  await ctx.render('index', {
+    title: 'Hello Koa 2!zt'
+  })
+})
 
 router.get('/goodsList/', async (ctx, next) => {
   ctx.body = {

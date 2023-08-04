@@ -4,7 +4,7 @@ const config = {
     USERNAME: 'zt',
     PASSWORD: 'zt123456',
     PORT: '3306',
-    HOST: 'localhost'
+    HOST: '114.132.166.145'
   }
 }
 
