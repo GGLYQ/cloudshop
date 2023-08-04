@@ -1,7 +1,7 @@
 const config = {
   database: {
     DATABASE: 'yiwushop',
-    USERNAME: 'root',
+    USERNAME: 'zt',
     PASSWORD: 'zt123456',
     PORT: '3306',
     HOST: 'localhost'
