@@ -38,7 +38,7 @@ import { onMounted, reactive } from 'vue';
 import useGoodsStore from '@/store/goods.js'
 import { watch } from 'vue';
 import { useRouter } from 'vue-router';
-import { showLoadingToast,closeToast } from 'vant';
+import { showToast,showLoadingToast,closeToast } from 'vant';
 
 
 let state = reactive({
@@ -63,7 +63,14 @@ onMounted(async () => {
 
 const router = useRouter()
 const gotoDetail = (item) => {
-  router.push({ path: `/product/${item.id}` })
+  if (JSON.parse(sessionStorage.getItem('userInfo')) == null) {
+    setTimeout(() => {
+      showToast('您还未登录哦！');
+      router.push('/login')
+    }, 1000)
+  } else {
+    router.push({ path: `/product/${item.id}` })
+  }
 }
 </script>
 

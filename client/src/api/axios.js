@@ -1,7 +1,7 @@
 import axios from 'axios';
 import { showFailToast } from 'vant';
 
-axios.defaults.baseURL = 'http://114.132.166.145:3000/'
+axios.defaults.baseURL = 'http://localhost:3000/'
 // axios.defaults.withCredentials = true //允许axios在请求过程中携带cookie凭证
 // axios.defaults.headers['X-Requested-With'] = 'XMLHttpRequest' //开启axios在浏览器中的能力
 // axios.defaults.headers['token'] = localStorage.getItem('token') || ''  //在localStoragr中取token值

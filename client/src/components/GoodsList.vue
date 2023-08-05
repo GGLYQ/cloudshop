@@ -36,7 +36,7 @@
 import axios from '@/api/axios.js';
 import { reactive } from 'vue';
 import {useRouter} from 'vue-router';
-import { showLoadingToast,closeToast } from 'vant';
+import { showToast,showLoadingToast,closeToast } from 'vant';
 
 const router=useRouter()
 
@@ -55,7 +55,14 @@ const getgoods = async () => {
 getgoods()
 
 const gotoDetail=(item)=>{
-  router.push({path:`/product/${item.id}`})
+  if (JSON.parse(sessionStorage.getItem('userInfo')) == null) {
+    setTimeout(() => {
+      showToast('您还未登录哦！');
+      router.push('/login')
+    }, 1000)
+  } else {
+    router.push({ path: `/product/${item.id}` })
+  }
 }
 
 const imgs = document.querySelectorAll('img');

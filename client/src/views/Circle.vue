@@ -3,8 +3,8 @@
 
   <div class="nav">
     <ul class="nav-content">
-      <li class="nav-item" @click="goLook(item.imgUrl)" v-for="item in navList" :key="item.categoryId">
-        <span>{{ item.name }}</span>
+      <li class="nav-item" @click="goLook(item.imgUrl, item.categoryId)" v-for="item in navList" :key="item.categoryId">
+        <span :class="{ active: item.categoryId === currentIndex }">{{ item.name }}</span>
       </li>
     </ul>
   </div>
@@ -28,6 +28,7 @@ import { watch } from 'vue';
 
 const store = useBackgroundStore()
 const canvasRef = ref(null)
+const currentIndex = ref(1)
 const navList =
   [
     {
@@ -44,11 +45,6 @@ const navList =
       categoryId: 3
     }
   ]
-
-
-const goLook = (url) => {
-  store.changeLoadUrl(url)
-}
 
 onMounted(() => {
   const scene = new THREE.Scene()
@@ -75,17 +71,18 @@ onMounted(() => {
       scene.background = crt.texture
     })
   })
-  cubeTextureLoader.load(store.loadUrl, (texture) => {
-    const crt = new THREE.WebGLCubeRenderTarget(texture.image.height)
-    crt.fromEquirectangularTexture(renderer, texture)  //把全景图转换为纹理格式
-    scene.background = crt.texture
-  })
 
   //渲染
   renderer.setClearColor(0xcccccc)
   renderer.setSize(renderer.domElement.clientWidth, renderer.domElement.clientHeight)
   renderer.render(scene, camera)
 })
+
+
+const goLook = (url, id) => {
+  store.loadUrl = url
+  currentIndex.value = id
+}
 
 </script>
 
@@ -112,5 +109,9 @@ canvas {
     font-size: 15px;
     color: #858585;
   }
+}
+
+.active {
+  color: rgb(250, 105, 2)
 }
 </style>
